@@ -4,6 +4,7 @@
     "pages/discover/discover",
     "pages/myParticipation/myParticipation",
     "pages/profile/profile",
+    "pages/login/login",
     "pages/book-detail/book-detail",
     "pages/create-activity/create-activity",
     "pages/select-book/select-book",

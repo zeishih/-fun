@@ -1,0 +1,31 @@
+<view class="login-container">
+  <view class="logo-section">
+    <image class="logo" src="/static/images/logo.png" mode="aspectFit"></image>
+    <view class="app-name">阅读越有fun</view>
+    <view class="app-slogan">共读让阅读更有趣</view>
+  </view>
+  
+  <view class="login-section">
+    <view class="login-title">微信授权登录</view>
+    <view class="login-desc">登录后可以参与共读活动、打卡记录和获取更多功能</view>
+    
+    <button 
+      class="login-btn wechat-btn {{isLoading ? 'loading' : ''}}" 
+      bindtap="getUserProfile"
+      disabled="{{isLoading || !canUseGetUserProfile}}"
+    >
+      <image class="btn-icon" src="/static/images/wechat-icon.png" mode="aspectFit" wx:if="{{!isLoading}}"></image>
+      <view class="btn-loading" wx:if="{{isLoading}}"></view>
+      微信快速登录
+    </button>
+    
+    <view class="login-tips">
+      登录即代表你同意
+      <text class="link" catchtap="showPrivacyPolicy">《用户协议》</text>
+      和
+      <text class="link" catchtap="showPrivacyPolicy">《隐私政策》</text>
+    </view>
+  </view>
+  
+  <view class="skip-login" bindtap="skipLogin">暂不登录，先去看看</view>
+</view> 

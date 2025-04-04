@@ -5,19 +5,60 @@ Page({
    */
   data: {
     theme: 'light',
+    isLoggedIn: false,
     userInfo: {
       avatarUrl: '/static/images/avatars/default.png',
-      nickName: '阅读小达人',
-      level: 3,
-      points: 520,
-      joinDate: '2023年3月'
+      nickName: '未登录',
+      level: 0,
+      points: 0,
+      joinDate: ''
     },
-    badges: [
-      { id: 'badge001', name: '读书达人', icon: '/static/images/badges/reader.png', date: '2023-04-02' },
-      { id: 'badge002', name: '评论小能手', icon: '/static/images/badges/commenter.png', date: '2023-04-05' }
-    ],
-    notifications: 2,
+    badges: [],
+    notifications: 0,
     darkMode: false
+  },
+  
+  /**
+   * 跳转到登录页面
+   */
+  goToLogin: function() {
+    wx.navigateTo({
+      url: '/pages/login/login'
+    });
+  },
+  
+  /**
+   * 退出登录
+   */
+  logout: function() {
+    wx.showModal({
+      title: '提示',
+      content: '确定要退出登录吗？',
+      success: (res) => {
+        if (res.confirm) {
+          // 调用app的登出方法
+          getApp().logout().then(() => {
+            // 更新页面数据
+            this.setData({
+              isLoggedIn: false,
+              userInfo: {
+                avatarUrl: '/static/images/avatars/default.png',
+                nickName: '未登录',
+                level: 0,
+                points: 0,
+                joinDate: ''
+              },
+              badges: []
+            });
+            
+            wx.showToast({
+              title: '已退出登录',
+              icon: 'success'
+            });
+          });
+        }
+      }
+    });
   },
 
   /**
@@ -43,6 +84,12 @@ Page({
    * 跳转到消息通知页面
    */
   navigateToNotifications: function() {
+    // 如果未登录，则跳转到登录页
+    if (!this.data.isLoggedIn) {
+      this.goToLogin();
+      return;
+    }
+    
     wx.showToast({
       title: '功能开发中',
       icon: 'none'
@@ -53,6 +100,12 @@ Page({
    * 跳转到设置页面
    */
   navigateToSettings: function() {
+    // 如果未登录，则跳转到登录页
+    if (!this.data.isLoggedIn) {
+      this.goToLogin();
+      return;
+    }
+    
     wx.showToast({
       title: '功能开发中',
       icon: 'none'
@@ -92,7 +145,41 @@ Page({
    * 生命周期函数--监听页面显示
    */
   onShow: function () {
+    // 每次显示页面时检查登录状态
+    const app = getApp();
+    const isLoggedIn = app.globalData.isLoggedIn;
     
+    if (isLoggedIn) {
+      const userInfo = app.globalData.userInfo;
+      
+      // 读取勋章信息
+      let badges = [];
+      if (userInfo.userId === 'user_001') {
+        // 演示数据
+        badges = [
+          { id: 'badge001', name: '读书达人', icon: '/static/images/badges/reader.png', date: '2023-04-02' },
+          { id: 'badge002', name: '评论小能手', icon: '/static/images/badges/commenter.png', date: '2023-04-05' }
+        ];
+      }
+      
+      this.setData({
+        isLoggedIn: true,
+        userInfo: userInfo,
+        badges: badges
+      });
+    } else {
+      this.setData({
+        isLoggedIn: false,
+        userInfo: {
+          avatarUrl: '/static/images/avatars/default.png',
+          nickName: '未登录',
+          level: 0,
+          points: 0,
+          joinDate: ''
+        },
+        badges: []
+      });
+    }
   },
 
   /**

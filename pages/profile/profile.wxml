@@ -5,16 +5,21 @@
       <image class="user-avatar" src="{{userInfo.avatarUrl}}" mode="aspectFill"></image>
       <view class="user-info">
         <text class="user-name">{{userInfo.nickName}}</text>
-        <view class="user-level">
+        <view class="user-level" wx:if="{{isLoggedIn}}">
           <text class="level-text">Lv.{{userInfo.level}}</text>
           <view class="level-bar">
             <view class="level-progress" style="width: {{userInfo.points % 100}}%;"></view>
           </view>
         </view>
-        <text class="join-date">加入时间：{{userInfo.joinDate}}</text>
+        <text class="join-date" wx:if="{{isLoggedIn}}">加入时间：{{userInfo.joinDate}}</text>
+        
+        <!-- 未登录状态显示登录按钮 -->
+        <view wx:if="{{!isLoggedIn}}" class="login-btn-container">
+          <button class="login-btn" bindtap="goToLogin">点击登录</button>
+        </view>
       </view>
     </view>
-    <view class="user-stats">
+    <view class="user-stats" wx:if="{{isLoggedIn}}">
       <view class="stat-item">
         <text class="stat-value">{{userInfo.points}}</text>
         <text class="stat-label">积分</text>
@@ -52,10 +57,16 @@
         <view class="menu-arrow"></view>
       </view>
     </view>
+    
+    <!-- 登出按钮，仅在登录状态显示 -->
+    <view class="menu-item logout-item" bindtap="logout" wx:if="{{isLoggedIn}}">
+      <view class="menu-icon logout-icon"></view>
+      <text class="menu-text logout-text">退出登录</text>
+    </view>
   </view>
   
-  <!-- 勋章展示 -->
-  <view class="badges-section">
+  <!-- 勋章展示，仅在登录状态显示 -->
+  <view class="badges-section" wx:if="{{isLoggedIn}}">
     <view class="section-header">
       <text class="h2">我的勋章</text>
     </view>

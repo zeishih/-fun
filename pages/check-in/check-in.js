@@ -37,6 +37,14 @@ Page({
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
+    // 检查登录状态
+    if (!getApp().checkNeedLogin({
+      message: '请先登录后再进行打卡',
+      showToast: true
+    })) {
+      return;
+    }
+    
     console.log('打卡页面接收到的参数:', options);
     
     const activityId = options.id;
@@ -372,6 +380,14 @@ Page({
    * 提交打卡
    */
   submitCheckIn: function () {
+    // 再次检查登录状态
+    if (!getApp().checkNeedLogin({
+      message: '登录状态已过期，请重新登录',
+      showToast: true
+    })) {
+      return;
+    }
+    
     const { checkInData, activity, activityId } = this.data;
     
     console.log('===== 打卡提交 =====');
@@ -400,12 +416,18 @@ Page({
       title: '提交中...',
     });
     
-    // 获取当前用户信息（这里使用模拟数据）
-    const currentUser = {
-      id: 'user_001',
-      nickname: '阅读者小明',
-      avatarUrl: '/static/images/default-avatar.png'
-    };
+    // 获取当前用户信息
+    const app = getApp();
+    const userInfo = app.globalData.userInfo;
+    
+    if (!userInfo) {
+      wx.hideLoading();
+      wx.showToast({
+        title: '获取用户信息失败',
+        icon: 'none'
+      });
+      return;
+    }
     
     // 获取当前时间
     const now = new Date();
@@ -419,8 +441,9 @@ Page({
     // 构建打卡记录
     const checkInRecord = {
       id: `check_in_${Date.now()}`,
-      userId: currentUser.id,
-      user: currentUser,
+      userId: userInfo.userId,
+      userName: userInfo.nickName,
+      userAvatar: userInfo.avatarUrl,
       activityId: activityId,
       content: checkInData.text || '完成今日阅读打卡', // 没有文字时提供默认内容
       images: checkInData.imageList || [],
@@ -450,6 +473,21 @@ Page({
         // 确保有 checkInRecords 数组
         if (!updatedActivity.checkInRecords) {
           updatedActivity.checkInRecords = [];
+        }
+        
+        // 检查是否已经打卡
+        const today = new Date().toISOString().split('T')[0];
+        const alreadyCheckedIn = updatedActivity.checkInRecords.some(
+          record => record.userId === userInfo.userId && record.date === today
+        );
+        
+        if (alreadyCheckedIn && !this.data.showDebugInfo) {
+          wx.hideLoading();
+          wx.showToast({
+            title: '今日已完成打卡',
+            icon: 'none'
+          });
+          return;
         }
         
         // 添加打卡记录到活动中
@@ -549,8 +587,8 @@ Page({
           description: "这是一个测试活动",
           checkInRequirement: "flexible",
           checkInContent: ["text", "image"],
-          creator: currentUser,
-          participants: [currentUser],
+          creator: userInfo,
+          participants: [userInfo],
           checkInRecords: [checkInRecord]
         };
         

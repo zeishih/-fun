@@ -1,4 +1,6 @@
 // app.js
+import userService from './services/user';
+
 App({
   onLaunch: function() {
     // 小程序启动时执行的逻辑
@@ -28,6 +30,88 @@ App({
     
     // 初始化应用数据
     this.initAppData();
+    
+    // 检查用户登录状态
+    this.checkLoginStatus();
+  },
+  
+  /**
+   * 检查登录状态
+   */
+  checkLoginStatus: function() {
+    const isLoggedIn = userService.checkLogin();
+    
+    if (isLoggedIn) {
+      // 获取用户信息
+      const userInfo = userService.getUserInfo();
+      
+      // 更新全局状态
+      this.globalData.userInfo = userInfo;
+      this.globalData.isLoggedIn = true;
+      
+      console.log('用户已登录:', userInfo.nickName);
+    } else {
+      console.log('用户未登录');
+    }
+  },
+  
+  /**
+   * 检查是否需要登录
+   * @param {Object} options - 配置选项
+   * @param {boolean} options.redirectToLogin - 是否自动跳转到登录页，默认为true
+   * @param {string} options.message - 提示用户的消息，默认为"请先登录"
+   * @param {boolean} options.showToast - 是否显示提示信息，默认为true
+   * @returns {boolean} 是否已登录
+   */
+  checkNeedLogin: function(options = {}) {
+    // 设置默认选项
+    const defaultOptions = {
+      redirectToLogin: true,
+      message: '请先登录',
+      showToast: true
+    };
+    
+    const opt = {...defaultOptions, ...options};
+    const isLoggedIn = this.globalData.isLoggedIn;
+    
+    if (!isLoggedIn) {
+      // 显示提示信息
+      if (opt.showToast) {
+        wx.showToast({
+          title: opt.message,
+          icon: 'none',
+          duration: 1500
+        });
+      }
+      
+      // 跳转到登录页
+      if (opt.redirectToLogin) {
+        // 延迟跳转，让提示消息显示完
+        setTimeout(() => {
+          wx.navigateTo({
+            url: '/pages/login/login'
+          });
+        }, 1000);
+      }
+    }
+    
+    return isLoggedIn;
+  },
+  
+  /**
+   * 登出
+   */
+  logout: function() {
+    return userService.logout().then(() => {
+      // 清除全局用户信息
+      this.globalData.userInfo = null;
+      this.globalData.isLoggedIn = false;
+      
+      // 跳转到首页
+      wx.switchTab({
+        url: '/pages/home/home'
+      });
+    });
   },
   
   /**
@@ -124,8 +208,27 @@ App({
     }
   },
   
+  /**
+   * 检查登录并直接跳转（不带提示）
+   * 用于需要立即重定向到登录页面的场景
+   * @returns {boolean} 是否已登录
+   */
+  checkLoginAndRedirect: function() {
+    const isLoggedIn = this.globalData.isLoggedIn;
+    
+    if (!isLoggedIn) {
+      // 直接跳转到登录页面
+      wx.redirectTo({
+        url: '/pages/login/login'
+      });
+    }
+    
+    return isLoggedIn;
+  },
+  
   globalData: {
     userInfo: null,
+    isLoggedIn: false,
     systemInfo: {},
     theme: 'light', // 默认浅色模式
   }

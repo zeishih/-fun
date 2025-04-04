@@ -1,162 +1,248 @@
 <!--pages/create-activity/create-activity.wxml-->
-<view class="container">
-  <form bindsubmit="submitForm">
-    <!-- 活动基本信息 -->
-    <view class="form-section">
-      <view class="section-title">活动基本信息</view>
-      
-      <view class="form-item">
-        <text class="form-label required">活动名称</text>
-        <input class="form-input" name="title" placeholder="请输入活动名称（最多30个字符）" maxlength="30" value="{{formData.title}}" bindinput="onTitleInput" />
-      </view>
-      
-      <view class="form-item">
-        <text class="form-label required">关联图书</text>
-        <view class="book-selector" bindtap="selectBook">
-          <block wx:if="{{formData.book}}">
-            <view class="selected-book">
-              <image class="book-cover" src="{{formData.book.coverUrl || defaultCover}}" mode="aspectFill"></image>
-              <view class="book-info">
-                <text class="book-title">{{formData.book.title}}</text>
-                <text class="book-author">{{formData.book.author}}</text>
-              </view>
-              <view class="change-book">更换</view>
-            </view>
-          </block>
-          <block wx:else>
-            <view class="empty-book">
-              <view class="add-icon"></view>
-              <text>选择关联图书</text>
-            </view>
-          </block>
+<view class="create-container">
+  <!-- 未登录状态 -->
+  <view class="login-required" wx:if="{{!isLoggedIn}}">
+    <image class="login-image" src="/static/images/login-required.png" mode="aspectFit"></image>
+    <view class="login-tip">请先登录后创建活动</view>
+    <button class="login-btn" bindtap="goToLogin">去登录</button>
+  </view>
+  
+  <!-- 已登录状态：创建活动表单 -->
+  <block wx:else>
+    <!-- 原有的创建活动表单内容 -->
+    <form bindsubmit="submitForm">
+      <view class="form-section">
+        <view class="section-title">
+          <text class="h2">基本信息</text>
         </view>
-      </view>
-      
-      <view class="form-item">
-        <text class="form-label required">活动时间</text>
-        <view class="date-picker">
-          <picker mode="date" value="{{formData.startDate}}" start="{{minDate}}" end="{{maxDate}}" bindchange="onStartDateChange">
-            <view class="date-value">{{formData.startDate || '请选择开始日期'}}</view>
-          </picker>
-          <text class="date-separator">至</text>
-          <picker mode="date" value="{{formData.endDate}}" start="{{startDateForEnd}}" end="{{maxDate}}" bindchange="onEndDateChange">
-            <view class="date-value">{{formData.endDate || '请选择结束日期'}}</view>
-          </picker>
+        
+        <!-- 活动名称 -->
+        <view class="form-item">
+          <view class="form-label">
+            <text>活动名称</text>
+            <text class="required">*</text>
+          </view>
+          <input 
+            class="form-input" 
+            placeholder="请输入活动名称" 
+            value="{{formData.title}}"
+            bindinput="onTitleInput"
+          />
         </view>
-      </view>
-      
-      <view class="form-item">
-        <text class="form-label required">参与人数</text>
-        <picker mode="selector" range="{{participantOptions}}" value="{{participantIndex}}" bindchange="onParticipantChange">
-          <view class="picker-value">{{participantOptions[participantIndex]}}</view>
-        </picker>
-      </view>
-      
-      <view class="form-item">
-        <text class="form-label required">活动类型</text>
-        <radio-group class="radio-group" bindchange="onActivityTypeChange">
-          <label class="radio-item">
-            <radio value="public" checked="{{formData.activityType === 'public'}}" />
-            <text>公开活动（所有人可见）</text>
-          </label>
-          <label class="radio-item">
-            <radio value="private" checked="{{formData.activityType === 'private'}}" />
-            <text>私密活动（仅邀请可见）</text>
-          </label>
-        </radio-group>
-      </view>
-    </view>
-    
-    <!-- 活动详情 -->
-    <view class="form-section">
-      <view class="section-title">活动详情</view>
-      
-      <view class="form-item">
-        <text class="form-label required">活动简介</text>
-        <textarea class="form-textarea" name="description" placeholder="请输入活动简介（最多200个字符）" maxlength="200" value="{{formData.description}}" bindinput="onDescriptionInput"></textarea>
-        <view class="word-count">
-          <text wx:if="{{formData.description}}">{{formData.description.length}}</text>
-          <text wx:else>0</text>
-          <text>/200</text>
-        </view>
-      </view>
-      
-      <view class="form-item">
-        <text class="form-label">活动规则</text>
-        <view class="rule-list">
-          <view class="rule-item" wx:for="{{formData.rules}}" wx:key="index">
-            <view class="rule-content">
-              <text class="rule-number">{{index + 1}}.</text>
-              <input class="rule-input" placeholder="请输入规则内容" value="{{item}}" data-index="{{index}}" bindinput="onRuleInput" />
-            </view>
-            <view class="delete-rule" catchtap="deleteRule" data-index="{{index}}">
-              <view class="delete-icon"></view>
+        
+        <!-- 关联书籍 -->
+        <view class="form-item">
+          <view class="form-label">
+            <text>关联书籍</text>
+            <text class="required">*</text>
+          </view>
+          
+          <view class="book-select" bindtap="selectBook" wx:if="{{!formData.book}}">
+            <view class="book-placeholder">
+              <text>请选择活动关联的书籍</text>
+              <text class="select-icon">+</text>
             </view>
           </view>
           
-          <view class="add-rule" bindtap="addRule">
-            <view class="add-icon"></view>
-            <text>添加规则</text>
+          <view class="selected-book" wx:else>
+            <image class="book-cover" src="{{formData.book.coverUrl || defaultCover}}" mode="aspectFill"></image>
+            <view class="book-info">
+              <text class="book-title">{{formData.book.title}}</text>
+              <text class="book-author">{{formData.book.author}}</text>
+            </view>
+            <view class="book-actions">
+              <view class="change-book" catchtap="selectBook">更换</view>
+            </view>
           </view>
         </view>
-      </view>
-      
-      <view class="form-item">
-        <text class="form-label">打卡要求</text>
-        <radio-group class="radio-group" bindchange="onCheckInRequirementChange">
-          <label class="radio-item">
-            <radio value="daily" checked="{{formData.checkInRequirement === 'daily'}}" />
-            <text>每日打卡</text>
-          </label>
-          <label class="radio-item">
-            <radio value="flexible" checked="{{formData.checkInRequirement === 'flexible'}}" />
-            <text>自由打卡</text>
-          </label>
-        </radio-group>
-      </view>
-      
-      <view class="form-item" wx:if="{{formData.checkInRequirement === 'daily'}}">
-        <text class="form-label">打卡时间段</text>
-        <view class="time-picker">
-          <picker mode="time" value="{{formData.checkInStartTime}}" start="00:00" end="23:59" bindchange="onCheckInStartTimeChange">
-            <view class="time-value">{{formData.checkInStartTime || '开始时间'}}</view>
+        
+        <!-- 活动时间 -->
+        <view class="form-item">
+          <view class="form-label">
+            <text>活动时间</text>
+            <text class="required">*</text>
+          </view>
+          
+          <view class="date-range">
+            <picker 
+              mode="date" 
+              value="{{formData.startDate}}" 
+              start="{{minDate}}" 
+              end="{{maxDate}}" 
+              bindchange="onStartDateChange"
+            >
+              <view class="date-picker {{formData.startDate ? 'has-value' : ''}}">
+                <text wx:if="{{!formData.startDate}}">开始日期</text>
+                <text wx:else>{{formData.startDate}}</text>
+              </view>
+            </picker>
+            
+            <text class="date-separator">至</text>
+            
+            <picker 
+              mode="date" 
+              value="{{formData.endDate}}" 
+              start="{{startDateForEnd || minDate}}" 
+              end="{{maxDate}}" 
+              bindchange="onEndDateChange"
+              disabled="{{!formData.startDate}}"
+            >
+              <view class="date-picker {{formData.endDate ? 'has-value' : ''}}">
+                <text wx:if="{{!formData.endDate}}">结束日期</text>
+                <text wx:else>{{formData.endDate}}</text>
+              </view>
+            </picker>
+          </view>
+        </view>
+        
+        <!-- 参与人数 -->
+        <view class="form-item">
+          <view class="form-label">
+            <text>参与人数</text>
+          </view>
+          
+          <picker 
+            mode="selector" 
+            range="{{participantOptions}}" 
+            value="{{participantIndex}}" 
+            bindchange="onParticipantChange"
+          >
+            <view class="selector-value">
+              <text>{{participantOptions[participantIndex]}}</text>
+              <text class="selector-arrow"></text>
+            </view>
           </picker>
-          <text class="time-separator">至</text>
-          <picker mode="time" value="{{formData.checkInEndTime}}" start="{{formData.checkInStartTime || '00:00'}}" end="23:59" bindchange="onCheckInEndTimeChange">
-            <view class="time-value">{{formData.checkInEndTime || '结束时间'}}</view>
-          </picker>
+        </view>
+        
+        <!-- 活动类型 -->
+        <view class="form-item">
+          <view class="form-label">
+            <text>活动类型</text>
+          </view>
+          
+          <radio-group class="radio-group" bindchange="onActivityTypeChange">
+            <label class="radio-label">
+              <radio value="public" checked="{{formData.activityType === 'public'}}" />
+              <text>公开</text>
+            </label>
+            <label class="radio-label">
+              <radio value="private" checked="{{formData.activityType === 'private'}}" />
+              <text>私密</text>
+            </label>
+          </radio-group>
         </view>
       </view>
       
-      <view class="form-item">
-        <text class="form-label">打卡内容</text>
-        <view class="content-types">
-          <view class="content-type-info">活动支持的打卡类型（以下为必选项）：</view>
-          <view class="content-type-tags">
-            <view class="content-type-tag active">文字</view>
-            <view class="content-type-tag active">图片</view>
+      <!-- 活动详情 -->
+      <view class="form-section">
+        <view class="section-title">
+          <text class="h2">活动详情</text>
+        </view>
+        
+        <!-- 活动描述 -->
+        <view class="form-item">
+          <view class="form-label">
+            <text>活动描述</text>
+            <text class="required">*</text>
           </view>
-          <view class="content-type-desc">
-            参与者可以在打卡时提交文字内容和上传图片
+          
+          <textarea 
+            class="form-textarea" 
+            placeholder="请输入活动描述，建议包含活动目的、适合人群等信息" 
+            value="{{formData.description}}"
+            bindinput="onDescriptionInput"
+          ></textarea>
+        </view>
+        
+        <!-- 活动规则 -->
+        <view class="form-item">
+          <view class="form-label">
+            <text>活动规则</text>
+          </view>
+          
+          <view class="rules-container">
+            <view class="rule-item" wx:for="{{formData.rules}}" wx:key="index">
+              <input 
+                class="rule-input" 
+                placeholder="请输入活动规则" 
+                value="{{item}}"
+                data-index="{{index}}"
+                bindinput="onRuleInput"
+              />
+              <view class="delete-rule" data-index="{{index}}" bindtap="deleteRule">
+                <text class="delete-icon">×</text>
+              </view>
+            </view>
+            
+            <view class="add-rule" bindtap="addRule">
+              <text class="add-icon">+</text>
+              <text>添加规则</text>
+            </view>
           </view>
         </view>
       </view>
-    </view>
-    
-    <!-- 协议同意 -->
-    <view class="agreement">
-      <checkbox-group bindchange="onAgreementChange">
-        <label class="checkbox-agreement">
-          <checkbox value="agreed" checked="{{formData.agreed}}" />
-          <text>我已阅读并同意</text>
-          <text class="agreement-link" bindtap="showAgreement">《共读活动创建协议》</text>
-        </label>
-      </checkbox-group>
-    </view>
-    
-    <!-- 提交按钮 -->
-    <button class="submit-btn {{formValid ? '' : 'disabled'}}" form-type="submit" disabled="{{!formValid}}">
-      创建活动
-    </button>
-  </form>
+      
+      <!-- 打卡设置 -->
+      <view class="form-section">
+        <view class="section-title">
+          <text class="h2">打卡设置</text>
+        </view>
+        
+        <!-- 打卡要求 -->
+        <view class="form-item">
+          <view class="form-label">
+            <text>打卡要求</text>
+          </view>
+          
+          <radio-group class="radio-group" bindchange="onCheckInRequirementChange">
+            <label class="radio-label">
+              <radio value="daily" checked="{{formData.checkInRequirement === 'daily'}}" />
+              <text>每日打卡</text>
+            </label>
+            <label class="radio-label">
+              <radio value="flexible" checked="{{formData.checkInRequirement === 'flexible'}}" />
+              <text>自由打卡</text>
+            </label>
+          </radio-group>
+        </view>
+        
+        <!-- 打卡内容 -->
+        <view class="form-item">
+          <view class="form-label">
+            <text>打卡内容</text>
+          </view>
+          
+          <view class="checkin-content-box">
+            <view class="content-type-tag">
+              <text class="tag-icon text-icon">T</text>
+              <text>文字</text>
+            </view>
+            <view class="content-type-tag">
+              <text class="tag-icon image-icon">I</text>
+              <text>图片</text>
+            </view>
+            <view class="content-type-notice">(文字和图片为必选项)</view>
+          </view>
+        </view>
+      </view>
+      
+      <!-- 提交区域 -->
+      <view class="submit-section">
+        <view class="agreement-box">
+          <checkbox-group bindchange="onAgreementChange">
+            <label class="agreement-label">
+              <checkbox value="agreed" checked="{{formData.agreed}}" />
+              <text>我已阅读并同意<text class="agreement-link" catchtap="showAgreement">《共读活动创建协议》</text></text>
+            </label>
+          </checkbox-group>
+        </view>
+        
+        <button 
+          class="submit-btn {{formValid ? 'enabled' : 'disabled'}}" 
+          form-type="submit"
+          disabled="{{!formValid}}"
+        >创建活动</button>
+      </view>
+    </form>
+  </block>
 </view>

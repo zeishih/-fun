@@ -1,101 +1,79 @@
 <view class="participation-container">
-  <!-- 页面标题 -->
-  <view class="page-header">
-    <text class="h1">我的参与</text>
+  <!-- 未登录状态 -->
+  <view class="login-required" wx:if="{{!isLoggedIn}}">
+    <image class="login-image" src="/static/images/login-required.png" mode="aspectFit"></image>
+    <view class="login-tip">请先登录后查看您的参与记录</view>
+    <button class="login-btn" bindtap="goToLogin">去登录</button>
   </view>
   
-  <!-- 加载状态 -->
-  <view wx:if="{{loading}}" class="loading-container">
-    <view class="loading"></view>
-  </view>
-  
-  <!-- 页面内容 -->
-  <view wx:else class="content-container">
-    <!-- 我参与的共读活动 -->
-    <view class="section">
-      <view class="section-header">
-        <text class="h2">我的共读活动</text>
+  <!-- 已登录状态 -->
+  <block wx:else>
+    <!-- 标签页切换 -->
+    <view class="tabs">
+      <view class="tab {{activeTab === 'joined' ? 'active' : ''}}" bindtap="switchTab" data-tab="joined">
+        <text>我参与的</text>
+        <view class="tab-line" wx:if="{{activeTab === 'joined'}}"></view>
       </view>
-      <view wx:if="{{activities.length > 0}}">
-        <view wx:for="{{activities}}" wx:key="id" class="activity-card card">
-          <view class="activity-info">
-            <text class="activity-title">{{item.title}}</text>
-            <text class="activity-date">{{item.startDate}} 至 {{item.endDate}}</text>
-          </view>
-          <view class="progress-container">
-            <view class="progress-bar">
-              <view class="progress-inner" style="width: {{item.progress}}%;"></view>
+      <view class="tab {{activeTab === 'created' ? 'active' : ''}}" bindtap="switchTab" data-tab="created">
+        <text>我创建的</text>
+        <view class="tab-line" wx:if="{{activeTab === 'created'}}"></view>
+      </view>
+    </view>
+    
+    <!-- 加载中 -->
+    <view class="loading-container" wx:if="{{loading}}">
+      <view class="loading"></view>
+    </view>
+    
+    <!-- 内容区域 -->
+    <view class="content-area" wx:if="{{!loading}}">
+      <!-- 我参与的活动 -->
+      <view class="activity-list" wx:if="{{activeTab === 'joined'}}">
+        <block wx:if="{{joinedActivities.length > 0}}">
+          <view class="activity-item" wx:for="{{joinedActivities}}" wx:key="activityId" bindtap="goToActivityDetail" data-id="{{item.activityId}}">
+            <image class="activity-cover" src="{{item.coverUrl || '/static/images/default-cover.png'}}" mode="aspectFill"></image>
+            <view class="activity-info">
+              <view class="activity-title">{{item.title}}</view>
+              <view class="activity-book" wx:if="{{item.book}}">《{{item.book.title}}》</view>
+              <view class="activity-dates">{{item.startDate}} 至 {{item.endDate}}</view>
+              <view class="activity-status {{item.status}}">
+                <text wx:if="{{item.status === 'recruiting'}}">招募中</text>
+                <text wx:elif="{{item.status === 'ongoing'}}">进行中</text>
+                <text wx:elif="{{item.status === 'finished'}}">已结束</text>
+              </view>
             </view>
-            <text class="progress-text">{{item.progress}}%</text>
           </view>
+        </block>
+        <view class="empty-tip" wx:else>
+          <image class="empty-icon" src="/static/images/empty-data.png" mode="aspectFit"></image>
+          <text>您还没有参与任何活动</text>
         </view>
       </view>
-      <view wx:else class="empty-list">
-        <text>暂无参与的共读活动</text>
-      </view>
-    </view>
-    
-    <!-- 我的打卡记录 -->
-    <view class="section">
-      <view class="section-header">
-        <text class="h2">我的打卡记录</text>
-      </view>
-      <view wx:if="{{checkIns.length > 0}}">
-        <view wx:for="{{checkIns}}" wx:key="id" class="checkin-card card">
-          <view class="checkin-header">
-            <view class="checkin-book">
-              <text class="book-title">《{{item.bookTitle}}》</text>
-              <text class="checkin-date">{{item.date}}</text>
+      
+      <!-- 我创建的活动 -->
+      <view class="activity-list" wx:if="{{activeTab === 'created'}}">
+        <block wx:if="{{myActivities.length > 0}}">
+          <view class="activity-item" wx:for="{{myActivities}}" wx:key="activityId" bindtap="goToActivityDetail" data-id="{{item.activityId}}">
+            <image class="activity-cover" src="{{item.coverUrl || '/static/images/default-cover.png'}}" mode="aspectFill"></image>
+            <view class="activity-info">
+              <view class="activity-title">{{item.title}}</view>
+              <view class="activity-book" wx:if="{{item.book}}">《{{item.book.title}}》</view>
+              <view class="activity-dates">{{item.startDate}} 至 {{item.endDate}}</view>
+              <view class="activity-participants">参与人数: {{item.currentParticipants || 0}}/{{item.maxParticipants || '不限'}}</view>
+              <view class="activity-status {{item.status}}">
+                <text wx:if="{{item.status === 'recruiting'}}">招募中</text>
+                <text wx:elif="{{item.status === 'ongoing'}}">进行中</text>
+                <text wx:elif="{{item.status === 'finished'}}">已结束</text>
+              </view>
             </view>
-            <view class="checkin-type {{item.type}}">{{item.type === 'text' ? '文字' : item.type === 'image' ? '图片' : item.type === 'voice' ? '语音' : '视频'}}</view>
           </view>
-          <view class="checkin-content">
-            <text>{{item.content}}</text>
-          </view>
+        </block>
+        <view class="empty-tip" wx:else>
+          <image class="empty-icon" src="/static/images/empty-data.png" mode="aspectFit"></image>
+          <text>您还没有创建任何活动</text>
+          <button class="create-btn" bindtap="goToCreateActivity">创建活动</button>
         </view>
       </view>
-      <view wx:else class="empty-list">
-        <text>暂无打卡记录</text>
-      </view>
     </view>
-    
-    <!-- 我的组队 -->
-    <view class="section">
-      <view class="section-header">
-        <text class="h2">我的组队</text>
-      </view>
-      <view wx:if="{{teams.length > 0}}">
-        <view wx:for="{{teams}}" wx:key="id" class="team-card card">
-          <view class="team-info">
-            <text class="team-name">{{item.name}}</text>
-            <text class="team-members">{{item.members}}人</text>
-          </view>
-          <view class="team-books">
-            <text class="books-label">共读书目：</text>
-            <text class="books-list">{{item.books.join('、')}}</text>
-          </view>
-        </view>
-      </view>
-      <view wx:else class="empty-list">
-        <text>暂无参与的组队</text>
-      </view>
-    </view>
-    
-    <!-- 我的收藏 -->
-    <view class="section">
-      <view class="section-header">
-        <text class="h2">我的收藏</text>
-      </view>
-      <view wx:if="{{favorites.length > 0}}" class="favorites-list">
-        <view wx:for="{{favorites}}" wx:key="id" class="favorite-item">
-          <image class="book-thumbnail" src="{{item.cover}}" mode="aspectFill"></image>
-          <text class="book-title">{{item.title}}</text>
-          <text class="book-author">{{item.author}}</text>
-        </view>
-      </view>
-      <view wx:else class="empty-list">
-        <text>暂无收藏图书</text>
-      </view>
-    </view>
-  </view>
+  </block>
 </view> 

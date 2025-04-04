@@ -1,15 +1,18 @@
 // pages/myParticipation/myParticipation.js
+import userService from '../../services/user';
+
 Page({
   /**
    * 页面的初始数据
    */
   data: {
-    theme: 'light',
-    loading: true,
+    isLoggedIn: false,
     activities: [],
-    checkIns: [],
-    teams: [],
-    favorites: []
+    myActivities: [],
+    joinedActivities: [],
+    activeTab: 'joined',
+    userInfo: null,
+    loading: true
   },
 
   /**
@@ -18,8 +21,10 @@ Page({
   onLoad: function (options) {
     // 获取系统主题
     const app = getApp();
+    const currentTheme = app.globalData.theme;
+    
     this.setData({
-      theme: app.globalData.theme
+      theme: currentTheme
     });
     
     // 注册主题变更回调
@@ -28,60 +33,122 @@ Page({
         theme: theme
       });
     };
-    
-    // 模拟加载数据
-    setTimeout(() => {
-      this.setData({
-        loading: false,
-        activities: [
-          {
-            id: 'act001',
-            title: '4月亲子共读月',
-            progress: 60,
-            startDate: '2023-04-01',
-            endDate: '2023-04-30'
-          }
-        ],
-        checkIns: [
-          {
-            id: 'checkin001',
-            bookTitle: '小王子',
-            date: '2023-04-05',
-            content: '今天读到了第三章，小王子离开了自己的星球...',
-            type: 'text'
-          }
-        ],
-        teams: [
-          {
-            id: 'team001',
-            name: '绘本交流小组',
-            members: 5,
-            books: ['好饿的毛毛虫', '月亮的味道']
-          }
-        ],
-        favorites: [
-          {
-            id: 'book004',
-            title: '了不起的狐狸爸爸',
-            author: '罗尔德·达尔',
-            cover: '/static/images/books/fantastic-mr-fox.png'
-          }
-        ]
-      });
-    }, 500);
   },
 
   /**
-   * 生命周期函数--监听页面初次渲染完成
+   * 切换标签页
    */
-  onReady: function () {
+  switchTab: function(e) {
+    const tab = e.currentTarget.dataset.tab;
+    this.setData({
+      activeTab: tab
+    });
+  },
+
+  /**
+   * 跳转到登录页
+   */
+  goToLogin: function() {
+    wx.navigateTo({
+      url: '/pages/login/login'
+    });
+  },
+
+  /**
+   * 跳转到活动详情
+   */
+  goToActivityDetail: function(e) {
+    const activityId = e.currentTarget.dataset.id;
+    wx.navigateTo({
+      url: `/pages/activity-detail/activity-detail?id=${activityId}`
+    });
+  },
+
+  /**
+   * 跳转到创建活动页面
+   */
+  goToCreateActivity: function() {
+    wx.navigateTo({
+      url: '/pages/create-activity/create-activity'
+    });
+  },
+
+  /**
+   * 加载用户参与的活动
+   */
+  loadUserActivities: function() {
+    this.setData({ loading: true });
     
+    try {
+      // 获取用户信息
+      const userInfo = userService.getUserInfo();
+      
+      if (!userInfo) {
+        this.setData({
+          isLoggedIn: false,
+          loading: false
+        });
+        return;
+      }
+      
+      // 获取所有活动
+      const activities = wx.getStorageSync('activities') || [];
+      
+      // 过滤我创建的活动
+      const myActivities = activities.filter(activity => 
+        activity.creator && activity.creator.userId === userInfo.userId
+      );
+      
+      // 过滤我参与的活动（不包括自己创建的）
+      const joinedActivities = activities.filter(activity => 
+        activity.participants && 
+        activity.participants.some(p => p.userId === userInfo.userId) &&
+        (!activity.creator || activity.creator.userId !== userInfo.userId)
+      );
+      
+      this.setData({
+        isLoggedIn: true,
+        userInfo: userInfo,
+        activities: activities,
+        myActivities: myActivities,
+        joinedActivities: joinedActivities,
+        loading: false
+      });
+    } catch (e) {
+      console.error('加载活动失败', e);
+      this.setData({ loading: false });
+      wx.showToast({
+        title: '加载失败，请重试',
+        icon: 'none'
+      });
+    }
   },
 
   /**
    * 生命周期函数--监听页面显示
    */
   onShow: function () {
+    // 检查登录状态
+    const isLoggedIn = userService.checkLogin();
+    
+    this.setData({
+      isLoggedIn: isLoggedIn
+    });
+    
+    if (isLoggedIn) {
+      // 如果已登录，加载用户参与的活动
+      this.loadUserActivities();
+    } else {
+      this.setData({
+        loading: false
+      });
+    }
+  },
+
+  /**
+   * 生命周期函数--监听页面初次渲染完成
+   */
+  onReady: function () {
     
   },
 

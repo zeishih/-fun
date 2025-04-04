@@ -1,108 +1,127 @@
 /* pages/profile/profile.wxss */
 .profile-container {
   padding: 30rpx;
+  background-color: #f5f7fa;
+  min-height: 100vh;
 }
 
-/* 用户信息卡片 */
-.user-card {
-  padding: 30rpx;
+.card {
+  background: #ffffff;
+  border-radius: 16rpx;
+  box-shadow: 0 4rpx 12rpx rgba(0, 0, 0, 0.05);
   margin-bottom: 30rpx;
+  overflow: hidden;
+}
+
+/* 用户卡片样式 */
+.user-card {
+  padding: 40rpx;
 }
 
 .user-header {
   display: flex;
   align-items: center;
-  margin-bottom: 30rpx;
 }
 
 .user-avatar {
   width: 120rpx;
   height: 120rpx;
-  border-radius: 50%;
-  border: 4rpx solid var(--primary-300);
+  border-radius: 60rpx;
   margin-right: 30rpx;
 }
 
 .user-info {
   flex: 1;
-  display: flex;
-  flex-direction: column;
 }
 
 .user-name {
   font-size: 36rpx;
   font-weight: bold;
-  color: var(--text-color);
-  margin-bottom: 15rpx;
+  color: #333;
+  margin-bottom: 10rpx;
 }
 
 .user-level {
   display: flex;
   align-items: center;
-  margin-bottom: 15rpx;
+  margin-bottom: 10rpx;
 }
 
 .level-text {
   font-size: 24rpx;
-  color: var(--primary-500);
+  color: #004cff;
+  margin-right: 20rpx;
   font-weight: bold;
-  margin-right: 15rpx;
 }
 
 .level-bar {
   flex: 1;
-  height: 12rpx;
-  background-color: var(--neutral-400);
-  border-radius: 6rpx;
+  height: 14rpx;
+  background: #e0e0e0;
+  border-radius: 7rpx;
   overflow: hidden;
 }
 
 .level-progress {
   height: 100%;
-  background-color: var(--primary-500);
-  border-radius: 6rpx;
+  background: linear-gradient(90deg, #004cff, #3a82ff);
+  border-radius: 7rpx;
 }
 
 .join-date {
   font-size: 24rpx;
-  color: var(--neutral-700);
+  color: #888;
+}
+
+.login-btn-container {
+  margin-top: 20rpx;
+}
+
+.login-btn {
+  background-color: #004cff;
+  color: white;
+  font-size: 28rpx;
+  padding: 10rpx 30rpx;
+  border-radius: 30rpx;
+  font-weight: 500;
+  display: inline-block;
 }
 
 .user-stats {
   display: flex;
-  border-top: 1rpx solid var(--neutral-500);
-  padding-top: 20rpx;
+  margin-top: 30rpx;
+  border-top: 1rpx solid #f0f0f0;
+  padding-top: 30rpx;
 }
 
 .stat-item {
   flex: 1;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+  text-align: center;
 }
 
 .stat-value {
-  font-size: 40rpx;
+  display: block;
+  font-size: 36rpx;
   font-weight: bold;
-  color: var(--text-color);
+  color: #333;
   margin-bottom: 8rpx;
 }
 
 .stat-label {
-  font-size: 24rpx;
-  color: var(--neutral-700);
+  font-size: 26rpx;
+  color: #888;
 }
 
-/* 菜单部分 */
+/* 菜单样式 */
 .menu-section {
-  margin-bottom: 30rpx;
+  padding: 0;
 }
 
 .menu-item {
   display: flex;
   align-items: center;
-  padding: 30rpx;
-  border-bottom: 1rpx solid var(--neutral-500);
+  padding: 30rpx 40rpx;
+  border-bottom: 1rpx solid #f0f0f0;
 }
 
 .menu-item:last-child {
@@ -112,28 +131,41 @@
 .menu-icon {
   width: 40rpx;
   height: 40rpx;
-  margin-right: 20rpx;
+  margin-right: 30rpx;
   background-size: contain;
   background-repeat: no-repeat;
   background-position: center;
 }
 
 .notification-icon {
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23004cff'%3E%3Cpath d='M12 22c1.1 0 2-.9 2-2h-4c0 1.1.89 2 2 2zm6-6v-5c0-3.07-1.64-5.64-4.5-6.32V4c0-.83-.67-1.5-1.5-1.5s-1.5.67-1.5 1.5v.68C7.63 5.36 6 7.92 6 11v5l-2 2v1h16v-1l-2-2z'/%3E%3C/svg%3E");
+  background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="%23004cff"><path d="M12 22c1.1 0 2-.9 2-2h-4c0 1.1.9 2 2 2zm6-6v-5c0-3.07-1.64-5.64-4.5-6.32V4c0-.83-.67-1.5-1.5-1.5s-1.5.67-1.5 1.5v.68C7.63 5.36 6 7.92 6 11v5l-2 2v1h16v-1l-2-2z"/></svg>');
 }
 
 .theme-icon {
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23004cff'%3E%3Cpath d='M12 3c-4.97 0-9 4.03-9 9s4.03 9 9 9 9-4.03 9-9-4.03-9-9-9zm0 16c-3.86 0-7-3.14-7-7s3.14-7 7-7 7 3.14 7 7-3.14 7-7 7z'/%3E%3Cpath d='M12 5v14c3.86 0 7-3.14 7-7s-3.14-7-7-7z'/%3E%3C/svg%3E");
+  background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="%23004cff"><path d="M12 3c-4.97 0-9 4.03-9 9s4.03 9 9 9 9-4.03 9-9-4.03-9-9-9zm0 16c-3.86 0-7-3.14-7-7s3.14-7 7-7 7 3.14 7 7-3.14 7-7 7z"/><path d="M12 17.3c2.92 0 5.3-2.38 5.3-5.3S14.92 6.7 12 6.7 6.7 9.08 6.7 12s2.38 5.3 5.3 5.3z"/></svg>');
 }
 
 .settings-icon {
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23004cff'%3E%3Cpath d='M19.14 12.94c.04-.3.06-.61.06-.94 0-.32-.02-.64-.07-.94l2.03-1.58c.18-.14.23-.41.12-.61l-1.92-3.32c-.12-.22-.37-.29-.59-.22l-2.39.96c-.5-.38-1.03-.7-1.62-.94l-.36-2.54c-.04-.24-.24-.41-.48-.41h-3.84c-.24 0-.43.17-.47.41l-.36 2.54c-.59.24-1.13.57-1.62.94l-2.39-.96c-.22-.08-.47 0-.59.22L2.74 8.87c-.12.21-.08.47.12.61l2.03 1.58c-.05.3-.09.63-.09.94s.02.64.07.94l-2.03 1.58c-.18.14-.23.41-.12.61l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.38 1.03.7 1.62.94l.36 2.54c.05.24.24.41.48.41h3.84c.24 0 .44-.17.47-.41l.36-2.54c.59-.24 1.13-.56 1.62-.94l2.39.96c.22.08.47 0 .59-.22l1.92-3.32c.12-.22.07-.47-.12-.61l-2.01-1.58zM12 15.6c-1.98 0-3.6-1.62-3.6-3.6s1.62-3.6 3.6-3.6 3.6 1.62 3.6 3.6-1.62 3.6-3.6 3.6z'/%3E%3C/svg%3E");
+  background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="%23004cff"><path d="M19.14 12.94c.04-.3.06-.61.06-.94 0-.32-.02-.64-.07-.94l2.03-1.58c.18-.14.23-.41.12-.61l-1.92-3.32c-.12-.22-.37-.29-.59-.22l-2.39.96c-.5-.38-1.03-.7-1.62-.94l-.36-2.54c-.04-.24-.24-.41-.48-.41h-3.84c-.24 0-.43.17-.47.41l-.36 2.54c-.59.24-1.13.57-1.62.94l-2.39-.96c-.22-.08-.47 0-.59.22L2.74 8.87c-.12.21-.08.47.12.61l2.03 1.58c-.05.3-.09.63-.09.94s.02.64.07.94l-2.03 1.58c-.18.14-.23.41-.12.61l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.38 1.03.7 1.62.94l.36 2.54c.05.24.24.41.48.41h3.84c.24 0 .44-.17.47-.41l.36-2.54c.59-.24 1.13-.56 1.62-.94l2.39.96c.22.08.47 0 .59-.22l1.92-3.32c.12-.22.07-.47-.12-.61l-2.01-1.58zM12 15.6c-1.98 0-3.6-1.62-3.6-3.6s1.62-3.6 3.6-3.6 3.6 1.62 3.6 3.6-1.62 3.6-3.6 3.6z"/></svg>');
+}
+
+.logout-icon {
+  background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="%23ff4757"><path d="M17 7l-1.41 1.41L18.17 11H8v2h10.17l-2.58 2.58L17 17l5-5zM4 5h8V3H4c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h8v-2H4V5z"/></svg>');
 }
 
 .menu-text {
   flex: 1;
   font-size: 30rpx;
-  color: var(--text-color);
+  color: #333;
+}
+
+.logout-text {
+  color: #ff4757;
+}
+
+.logout-item {
+  margin-top: 20rpx;
+  border-top: 8rpx solid #f5f7fa;
 }
 
 .menu-right {
@@ -142,28 +174,23 @@
 }
 
 .notification-badge {
-  background-color: var(--primary-500);
+  background: #ff4757;
   color: white;
-  font-size: 20rpx;
-  height: 36rpx;
-  min-width: 36rpx;
-  border-radius: 18rpx;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  padding: 0 8rpx;
-  margin-right: 15rpx;
+  font-size: 24rpx;
+  border-radius: 20rpx;
+  padding: 4rpx 12rpx;
+  margin-right: 20rpx;
 }
 
 .menu-arrow {
   width: 16rpx;
   height: 16rpx;
-  border-top: 3rpx solid var(--neutral-700);
-  border-right: 3rpx solid var(--neutral-700);
+  border-top: 2rpx solid #ccc;
+  border-right: 2rpx solid #ccc;
   transform: rotate(45deg);
 }
 
-/* 勋章部分 */
+/* 勋章区域样式 */
 .badges-section {
   margin-bottom: 30rpx;
 }
@@ -172,20 +199,34 @@
   margin-bottom: 20rpx;
 }
 
-.badges-container {
-  padding: 20rpx;
+.h2 {
+  font-size: 32rpx;
+  font-weight: bold;
+  color: #333;
+  position: relative;
+  padding-left: 24rpx;
+}
+
+.h2::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 8rpx;
+  height: 30rpx;
+  width: 8rpx;
+  background: #004cff;
+  border-radius: 4rpx;
 }
 
 .badges-list {
-  display: flex;
-  flex-direction: column;
+  padding: 20rpx;
 }
 
 .badge-item {
   display: flex;
   align-items: center;
   padding: 20rpx 0;
-  border-bottom: 1rpx solid var(--neutral-500);
+  border-bottom: 1rpx solid #f0f0f0;
 }
 
 .badge-item:last-child {
@@ -199,36 +240,33 @@
 }
 
 .badge-info {
-  display: flex;
-  flex-direction: column;
+  flex: 1;
 }
 
 .badge-name {
+  display: block;
   font-size: 28rpx;
   font-weight: bold;
-  color: var(--text-color);
-  margin-bottom: 8rpx;
+  color: #333;
+  margin-bottom: 6rpx;
 }
 
 .badge-date {
   font-size: 24rpx;
-  color: var(--neutral-700);
+  color: #888;
 }
 
 .empty-badges {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100rpx;
-  color: var(--neutral-700);
+  padding: 60rpx 0;
+  text-align: center;
+  color: #888;
   font-size: 28rpx;
 }
 
 /* 版本信息 */
 .version-info {
   text-align: center;
+  padding: 40rpx 0;
+  color: #999;
   font-size: 24rpx;
-  color: var(--neutral-700);
-  margin-top: 60rpx;
-  margin-bottom: 30rpx;
 } 

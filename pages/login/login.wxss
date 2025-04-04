@@ -1,0 +1,129 @@
+/* pages/login/login.wxss */
+
+.login-container {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  padding: 0 40rpx;
+  background-color: #ffffff;
+}
+
+/* Logo部分 */
+.logo-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 120rpx;
+  margin-bottom: 100rpx;
+}
+
+.logo {
+  width: 200rpx;
+  height: 200rpx;
+  margin-bottom: 30rpx;
+}
+
+.app-name {
+  font-size: 46rpx;
+  font-weight: bold;
+  color: #004cff;
+  margin-bottom: 16rpx;
+}
+
+.app-slogan {
+  font-size: 30rpx;
+  color: #666;
+}
+
+/* 登录区域 */
+.login-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 60rpx;
+}
+
+.login-title {
+  font-size: 36rpx;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 20rpx;
+  align-self: flex-start;
+}
+
+.login-desc {
+  font-size: 28rpx;
+  color: #666;
+  margin-bottom: 60rpx;
+  align-self: flex-start;
+}
+
+/* 登录按钮 */
+.login-btn {
+  width: 100%;
+  height: 90rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 45rpx;
+  margin-bottom: 30rpx;
+  font-size: 32rpx;
+  position: relative;
+  border: none;
+}
+
+.login-btn::after {
+  border: none;
+}
+
+.wechat-btn {
+  background-color: #07c160;
+  color: #fff;
+}
+
+.wechat-btn.loading {
+  background-color: #07c160;
+  opacity: 0.8;
+}
+
+.btn-icon {
+  width: 40rpx;
+  height: 40rpx;
+  margin-right: 10rpx;
+}
+
+.btn-loading {
+  width: 40rpx;
+  height: 40rpx;
+  margin-right: 10rpx;
+  border: 4rpx solid rgba(255, 255, 255, 0.3);
+  border-top: 4rpx solid #fff;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* 登录提示 */
+.login-tips {
+  font-size: 24rpx;
+  color: #999;
+  margin-top: 20rpx;
+}
+
+.link {
+  color: #004cff;
+}
+
+/* 跳过登录 */
+.skip-login {
+  font-size: 28rpx;
+  color: #999;
+  text-align: center;
+  margin-top: auto;
+  margin-bottom: 60rpx;
+  padding: 20rpx;
+} 

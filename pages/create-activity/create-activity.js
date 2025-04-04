@@ -4,6 +4,7 @@ Page({
    */
   data: {
     defaultCover: '/static/images/books/default-cover.png',
+    isLoggedIn: false,
     formData: {
       title: '',
       book: null,
@@ -41,29 +42,40 @@ Page({
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
-    const bookId = options.bookId;
-    
-    // 设置日期范围
-    const today = new Date();
-    const minDate = this.formatDate(today);
-    
-    const maxDateObj = new Date();
-    maxDateObj.setFullYear(maxDateObj.getFullYear() + 1);
-    const maxDate = this.formatDate(maxDateObj);
+    // 检查登录状态并设置到页面数据中
+    const app = getApp();
+    const isLoggedIn = app.globalData.isLoggedIn;
     
     this.setData({
-      minDate,
-      maxDate,
-      startDateForEnd: minDate
+      isLoggedIn: isLoggedIn
     });
     
-    // 如果传入了bookId，获取书籍信息
-    if (bookId) {
-      this.fetchBookInfo(bookId);
+    // 如果已登录，才初始化表单数据
+    if (isLoggedIn) {
+      const bookId = options.bookId;
+      
+      // 设置日期范围
+      const today = new Date();
+      const minDate = this.formatDate(today);
+      
+      const maxDateObj = new Date();
+      maxDateObj.setFullYear(maxDateObj.getFullYear() + 1);
+      const maxDate = this.formatDate(maxDateObj);
+      
+      this.setData({
+        minDate,
+        maxDate,
+        startDateForEnd: minDate
+      });
+      
+      // 如果传入了bookId，获取书籍信息
+      if (bookId) {
+        this.fetchBookInfo(bookId);
+      }
+      
+      // 检查表单有效性
+      this.checkFormValidity();
     }
-    
-    // 检查表单有效性
-    this.checkFormValidity();
   },
 
   /**
@@ -363,6 +375,24 @@ Page({
    * 表单提交
    */
   submitForm: function() {
+    // 强制检查登录状态
+    const app = getApp();
+    if (!app.globalData.isLoggedIn || !app.globalData.userInfo) {
+      wx.showToast({
+        title: '请先登录后再创建活动',
+        icon: 'none',
+        duration: 1500
+      });
+      
+      // 直接跳转到登录页面
+      setTimeout(() => {
+        wx.redirectTo({
+          url: '/pages/login/login'
+        });
+      }, 1000);
+      return;
+    }
+    
     const { formData } = this.data;
     
     // 如果表单验证未通过，不提交
@@ -380,47 +410,46 @@ Page({
     
     // 构建要提交的数据
     const submitData = {
-      id: `activity_${Date.now()}`,
+      activityId: 'activity_' + new Date().getTime(),
       title: formData.title,
       book: formData.book,
       startDate: formData.startDate,
       endDate: formData.endDate,
       maxParticipants: formData.maxParticipants,
-      currentParticipants: 1, // 创建者自己
-      activityType: formData.activityType,
+      currentParticipants: 1, // 创建者自动加入
+      type: formData.activityType,
       description: formData.description,
       rules: formData.rules.filter(rule => rule.trim() !== ''),
-      checkInRequirement: formData.checkInRequirement,
-      checkInStartTime: formData.checkInStartTime,
-      checkInEndTime: formData.checkInEndTime,
-      // 确保checkInContent是数组格式
-      checkInContent: Array.isArray(formData.checkInContent) ? formData.checkInContent : ['text'],
-      creator: {
-        id: 'user_001',
-        nickname: '阅读者小明',
-        avatarUrl: '/static/images/default-avatar.png'
+      checkInRequirements: {
+        frequency: formData.checkInRequirement,
+        contentTypes: formData.checkInContent
       },
-      participants: [
-        {
-          id: 'user_001',
-          nickname: '阅读者小明',
-          avatarUrl: '/static/images/default-avatar.png'
-        }
-      ],
-      checkInRecords: [],
+      status: 'recruiting', // 初始状态为招募中
       coverUrl: formData.book ? formData.book.coverUrl : this.data.defaultCover,
-      createdAt: new Date().toISOString()
+      createTime: new Date().toISOString(),
+      checkInRecords: [],
+      participants: []
     };
     
-    console.log('创建活动数据:', submitData);
-    console.log('打卡内容类型:', submitData.checkInContent);
+    // 添加创建者信息
+    const userInfo = app.globalData.userInfo;
+    const creator = {
+      userId: userInfo.userId,
+      nickName: userInfo.nickName,
+      avatarUrl: userInfo.avatarUrl
+    };
     
+    submitData.creator = creator;
+    // 创建者自动成为参与者
+    submitData.participants.push(creator);
+    
+    // 保存活动数据
     try {
-      // 获取现有活动数据
+      // 获取现有活动列表
       const activities = wx.getStorageSync('activities') || [];
       
       // 添加新活动
-      activities.unshift(submitData);
+      activities.push(submitData);
       
       // 保存回本地存储
       wx.setStorageSync('activities', activities);
@@ -430,14 +459,14 @@ Page({
       // 显示成功提示
       wx.showModal({
         title: '创建成功',
-        content: '活动已成功创建！',
+        content: '活动已创建成功！',
         confirmText: '立即查看',
         cancelText: '返回首页',
         success: (res) => {
           if (res.confirm) {
             // 跳转到活动详情页
-            wx.navigateTo({
-              url: `/pages/activity-detail/activity-detail?id=${submitData.id}`
+            wx.redirectTo({
+              url: '/pages/activity-detail/activity-detail?id=' + submitData.activityId
             });
           } else {
             // 返回首页
@@ -486,5 +515,27 @@ Page({
       'formData.description': e.detail.value
     });
     this.checkFormValidity();
+  },
+
+  /**
+   * 生命周期函数--监听页面显示
+   */
+  onShow: function() {
+    // 检查登录状态并更新页面数据
+    const app = getApp();
+    const isLoggedIn = app.globalData.isLoggedIn;
+    
+    this.setData({
+      isLoggedIn: isLoggedIn
+    });
+  },
+
+  /**
+   * 跳转到登录页面
+   */
+  goToLogin: function() {
+    wx.navigateTo({
+      url: '/pages/login/login'
+    });
   }
 }) 

@@ -1,14 +1,78 @@
 /* pages/myParticipation/myParticipation.wxss */
 .participation-container {
-  padding: 30rpx;
+  min-height: 100vh;
+  background-color: #f5f7fa;
+  padding-bottom: 30rpx;
 }
 
-/* 页面标题 */
-.page-header {
+/* 未登录状态样式 */
+.login-required {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 80vh;
+  padding: 0 60rpx;
+}
+
+.login-image {
+  width: 240rpx;
+  height: 240rpx;
   margin-bottom: 40rpx;
 }
 
-/* 加载状态 */
+.login-tip {
+  font-size: 32rpx;
+  color: #666;
+  margin-bottom: 60rpx;
+  text-align: center;
+}
+
+.login-btn {
+  background-color: #004cff;
+  color: white;
+  font-size: 32rpx;
+  font-weight: 500;
+  padding: 20rpx 60rpx;
+  border-radius: 40rpx;
+}
+
+/* 标签页样式 */
+.tabs {
+  display: flex;
+  background-color: #fff;
+  box-shadow: 0 2rpx 10rpx rgba(0, 0, 0, 0.05);
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+.tab {
+  flex: 1;
+  text-align: center;
+  padding: 30rpx 0;
+  font-size: 32rpx;
+  color: #666;
+  position: relative;
+}
+
+.tab.active {
+  color: #004cff;
+  font-weight: 500;
+}
+
+.tab-line {
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 60rpx;
+  height: 6rpx;
+  background-color: #004cff;
+  border-radius: 3rpx;
+}
+
+/* 加载样式 */
 .loading-container {
   display: flex;
   justify-content: center;
@@ -20,14 +84,130 @@
   width: 60rpx;
   height: 60rpx;
   border-radius: 50%;
-  border: 6rpx solid var(--primary-200);
-  border-top-color: var(--primary-500);
+  border: 6rpx solid #e6e8f1;
+  border-top-color: #004cff;
   animation: spin 1s linear infinite;
 }
 
 @keyframes spin {
   0% { transform: rotate(0deg); }
   100% { transform: rotate(360deg); }
+}
+
+/* 活动列表样式 */
+.content-area {
+  padding: 30rpx;
+}
+
+.activity-list {
+  margin-bottom: 30rpx;
+}
+
+.activity-item {
+  display: flex;
+  background-color: #fff;
+  border-radius: 16rpx;
+  padding: 20rpx;
+  margin-bottom: 20rpx;
+  box-shadow: 0 2rpx 10rpx rgba(0, 0, 0, 0.05);
+}
+
+.activity-cover {
+  width: 160rpx;
+  height: 220rpx;
+  border-radius: 8rpx;
+  margin-right: 20rpx;
+  background-color: #f2f2f2;
+}
+
+.activity-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.activity-title {
+  font-size: 32rpx;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 10rpx;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.activity-book {
+  font-size: 28rpx;
+  color: #666;
+  margin-bottom: 10rpx;
+}
+
+.activity-dates {
+  font-size: 26rpx;
+  color: #888;
+  margin-bottom: 10rpx;
+}
+
+.activity-participants {
+  font-size: 26rpx;
+  color: #888;
+  margin-bottom: 10rpx;
+}
+
+.activity-status {
+  font-size: 24rpx;
+  padding: 6rpx 16rpx;
+  border-radius: 20rpx;
+  width: fit-content;
+  display: inline-block;
+}
+
+.activity-status.recruiting {
+  background-color: #e6f7ff;
+  color: #1890ff;
+}
+
+.activity-status.ongoing {
+  background-color: #f6ffed;
+  color: #52c41a;
+}
+
+.activity-status.finished {
+  background-color: #f5f5f5;
+  color: #999;
+}
+
+/* 空状态提示 */
+.empty-tip {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 80rpx 0;
+  color: #999;
+  font-size: 28rpx;
+}
+
+.empty-icon {
+  width: 200rpx;
+  height: 200rpx;
+  margin-bottom: 30rpx;
+}
+
+.create-btn {
+  margin-top: 40rpx;
+  background-color: #004cff;
+  color: white;
+  font-size: 28rpx;
+  padding: 15rpx 40rpx;
+  border-radius: 30rpx;
+}
+
+/* 页面标题 */
+.page-header {
+  margin-bottom: 40rpx;
 }
 
 /* 内容区域 */

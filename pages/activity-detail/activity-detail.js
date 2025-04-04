@@ -1,6 +1,8 @@
 /**
  * 活动详情页面
  */
+import userService from '../../services/user';
+
 Page({
   /**
    * 页面的初始数据
@@ -13,7 +15,9 @@ Page({
     defaultCover: '/static/images/default-activity-cover.png', // 默认活动封面
     defaultBookCover: '/static/images/books/default-book-cover.png', // 默认图书封面
     loading: true, // 加载状态
-    needRefresh: false // 标记是否需要刷新
+    needRefresh: false, // 标记是否需要刷新
+    isParticipant: false, // 是否为活动参与者
+    btnText: '加入活动' // 按钮文本
   },
 
   /**
@@ -308,148 +312,118 @@ Page({
   },
 
   /**
-   * 参与活动
+   * 加入活动
    */
-  joinActivity: function () {
-    wx.showLoading({
-      title: '处理中...'
-    });
-
-    try {
-      // 获取当前用户信息
-      const currentUser = {
-        id: 'user_001',
-        nickname: '阅读者小明',
-        avatarUrl: '/static/images/default-avatar.png'
-      };
+  joinActivity: function() {
+    // 检查是否需要登录
+    if (!getApp().checkNeedLogin()) {
+      return;
+    }
+    
+    // 获取当前用户信息
+    const currentUser = this.getCurrentUser();
+    
+    // 获取所有活动
+    const activities = wx.getStorageSync('activities') || [];
+    
+    // 查找当前活动的索引
+    const activityIndex = activities.findIndex(a => a.activityId === this.data.activityId);
+    
+    if (activityIndex !== -1) {
+      // 复制当前活动数据
+      const updatedActivity = {...activities[activityIndex]};
       
-      // 获取所有活动
-      const activities = wx.getStorageSync('activities') || [];
-      
-      // 找到当前活动的索引
-      const activityIndex = activities.findIndex(a => a.id === this.data.activityId);
-      
-      if (activityIndex === -1) {
-        wx.hideLoading();
+      // 检查是否已经加入
+      if (!updatedActivity.participants.some(p => p.userId === currentUser.userId)) {
+        // 添加到参与者列表
+        updatedActivity.participants.push(currentUser);
+        
+        // 更新当前参与人数
+        updatedActivity.currentParticipants = updatedActivity.participants.length;
+        
+        // 更新活动数据
+        activities[activityIndex] = updatedActivity;
+        wx.setStorageSync('activities', activities);
+        
+        // 更新页面数据
+        this.setData({
+          activity: updatedActivity,
+          isParticipant: true,
+          btnText: '退出活动'
+        });
+        
         wx.showToast({
-          title: '活动不存在',
+          title: '已成功加入活动',
+          icon: 'success'
+        });
+      } else {
+        wx.showToast({
+          title: '您已经是活动成员',
           icon: 'none'
         });
-        return;
       }
-      
-      // 复制当前活动数据
-      const activity = {...activities[activityIndex]};
-      
-      // 确保participants数组已初始化
-      if (!activity.participants) {
-        activity.participants = [];
-      }
-      
-      // 添加当前用户到参与者列表
-      activity.participants.push(currentUser);
-      activity.currentParticipants = activity.participants.length;
-      
-      // 更新活动数据
-      activities[activityIndex] = activity;
-      
-      // 保存回本地存储
-      wx.setStorageSync('activities', activities);
-      
-      // 更新页面数据
-      this.setData({
-        activity: activity,
-        hasJoined: true
-      });
-      
-      wx.hideLoading();
-      
+    } else {
       wx.showToast({
-        title: '参与成功',
-        icon: 'success'
-      });
-    } catch (e) {
-      console.error('参与活动失败', e);
-      wx.hideLoading();
-      wx.showToast({
-        title: '操作失败，请重试',
+        title: '加入失败，活动不存在',
         icon: 'none'
       });
     }
   },
-
+  
   /**
    * 退出活动
    */
-  quitActivity: function () {
+  quitActivity: function() {
+    // 检查是否需要登录
+    if (!getApp().checkNeedLogin()) {
+      return;
+    }
+    
+    // 显示确认对话框
     wx.showModal({
-      title: '提示',
+      title: '退出活动',
       content: '确定要退出当前活动吗？',
       success: (res) => {
         if (res.confirm) {
-          wx.showLoading({
-            title: '处理中...'
-          });
+          // 获取当前用户ID
+          const currentUserId = this.getCurrentUser().userId;
           
-          try {
-            const currentUserId = 'user_001';
-            
-            // 获取所有活动
-            const activities = wx.getStorageSync('activities') || [];
-            
-            // 找到当前活动的索引
-            const activityIndex = activities.findIndex(a => a.id === this.data.activityId);
-            
-            if (activityIndex === -1) {
-              wx.hideLoading();
-              wx.showToast({
-                title: '活动不存在',
-                icon: 'none'
-              });
-              return;
-            }
-            
+          // 获取所有活动
+          const activities = wx.getStorageSync('activities') || [];
+          
+          // 查找当前活动的索引
+          const activityIndex = activities.findIndex(a => a.activityId === this.data.activityId);
+          
+          if (activityIndex !== -1) {
             // 复制当前活动数据
-            const activity = {...activities[activityIndex]};
+            const updatedActivity = {...activities[activityIndex]};
             
-            // 确保participants数组已初始化
-            if (!activity.participants) {
-              activity.participants = [];
-              wx.hideLoading();
-              wx.showToast({
-                title: '您未参与此活动',
-                icon: 'none'
-              });
-              return;
-            }
+            // 移除当前用户
+            updatedActivity.participants = updatedActivity.participants.filter(
+              p => p.userId !== currentUserId
+            );
             
-            // 从参与者列表中移除当前用户
-            activity.participants = activity.participants.filter(p => p.id !== currentUserId);
-            activity.currentParticipants = activity.participants.length;
+            // 更新当前参与人数
+            updatedActivity.currentParticipants = updatedActivity.participants.length;
             
             // 更新活动数据
-            activities[activityIndex] = activity;
-            
-            // 保存回本地存储
+            activities[activityIndex] = updatedActivity;
             wx.setStorageSync('activities', activities);
             
             // 更新页面数据
             this.setData({
-              activity: activity,
-              hasJoined: false
+              activity: updatedActivity,
+              isParticipant: false,
+              btnText: '加入活动'
             });
-            
-            wx.hideLoading();
             
             wx.showToast({
               title: '已退出活动',
               icon: 'success'
             });
-          } catch (e) {
-            console.error('退出活动失败', e);
-            wx.hideLoading();
+          } else {
             wx.showToast({
-              title: '操作失败，请重试',
+              title: '退出失败，活动不存在',
               icon: 'none'
             });
           }
@@ -524,5 +498,26 @@ Page({
    */
   onReachBottom: function () {
 
+  },
+
+  /**
+   * 获取当前用户信息
+   * @returns {Object} 当前用户信息
+   */
+  getCurrentUser: function() {
+    // 使用userService获取当前用户信息
+    const userInfo = userService.getUserInfo();
+    
+    if (userInfo) {
+      // 返回真实用户信息
+      return {
+        userId: userInfo.userId,
+        nickname: userInfo.nickName,
+        avatarUrl: userInfo.avatarUrl
+      };
+    }
+    
+    // 如果没有登录，返回null
+    return null;
   }
 }); 
