@@ -1,0 +1,49 @@
+# 微信小程序：阅读越有fun
+
+**目标：** 基于先前定义的详细交互逻辑，启动一个微信小程序的开发工作，该小程序旨在服务于亲子共读社区。
+
+**平台：** 微信小程序（使用标准的 WXML、WXSS、JavaScript 结构）。
+
+**第一阶段：项目设置与基础导航**
+
+请执行以下初始设置任务：
+
+1.  **初始化项目结构：** 创建一个新的微信小程序所需的基础文件和文件夹结构。
+2.  **配置 Tab Bar (`app.json`)：** 设置底部主导航栏，包含以下四个标签页。请包含占位文本，并建议或使用通用的图标路径约定（现在可以使用 `icon-home.png` 这样的占位符名称）：
+    * **页面路径 (pagePath):** `pages/home/home`
+        * **文本 (text):** 首页
+        * **图标路径 (iconPath):** (例如: `static/images/tabbar/icon-home.png`)
+        * **选中图标路径 (selectedIconPath):** (例如: `static/images/tabbar/icon-home-active.png`)
+    * **页面路径 (pagePath):** `pages/discover/discover`
+        * **文本 (text):** 发现
+        * **图标路径 (iconPath):** (例如: `static/images/tabbar/icon-discover.png`)
+        * **选中图标路径 (selectedIconPath):** (例如: `static/images/tabbar/icon-discover-active.png`)
+    * **页面路径 (pagePath):** `pages/myParticipation/myParticipation`
+        * **文本 (text):** 我的参与
+        * **图标路径 (iconPath):** (例如: `static/images/tabbar/icon-participation.png`)
+        * **选中图标路径 (selectedIconPath):** (例如: `static/images/tabbar/icon-participation-active.png`)
+    * **页面路径 (pagePath):** `pages/profile/profile`
+        * **文本 (text):** 个人中心
+        * **图标路径 (iconPath):** (例如: `static/images/tabbar/icon-profile.png`)
+        * **选中图标路径 (selectedIconPath):** (例如: `static/images/tabbar/icon-profile-active.png`)
+3.  **创建基础页面文件：** 为上述四个标签页 (`home`, `discover`, `myParticipation`, `profile`) 分别生成对应的文件夹及必要的页面文件：
+    * `[pageName].js`
+    * `[pageName].json`
+    * `[pageName].wxml`
+    * `[pageName].wxss`
+4.  **添加占位内容：** 在每个页面的 `.wxml` 文件中，添加一个简单的 `<view>` 标签，包含页面名称作为文本（例如：`<view>首页</view>`, `<view>发现</view>` 等），以便基础导航结构可见且可交互。
+5.  **全局样式 (`app.wxss` - 可选，但推荐)：** 初始化 `app.wxss` 文件，可以包含一些基础的 CSS 重置或通用样式（如果适用）。
+6.  ** 设计风格
+
+      - 整体风格参考Linear App的简约现代设计
+      - 使用清晰的视觉层次结构，突出重要内容
+      - 配色方案应专业、和谐，适合长时间阅读
+      -**根据提供的JSON文件内容（颜色、字体等）配置TailwindCSS的样式Token，确保设计一致性**
+      - 实现完整的深色/浅色模式切换功能，默认跟随系统设置
+      - 代码结构清晰，包含适当注释，便于理解和维护
+
+**整体背景参考：**
+请注意，此项目基于我们为亲子共读应用定义的详细交互逻辑。关键功能将包括：书目库、官方共读、自由组队、打卡（文字、图片、语音、视频）、活动空间内的分享流、点赞/评论、日推荐、勋章/成就系统、用户发起的活动以及个人中心管理。我们将逐步构建这些功能。
+
+**后续步骤（预览）：**
+在完成此初始结构设置后，我们很可能会先着手实现“发现” (Discover) 标签页的功能，并从“书目库” (Book Library) 的浏览和添加功能开始。

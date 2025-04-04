@@ -1,0 +1,147 @@
+<!-- 活动详情页面 -->
+<view class="container">
+  <!-- 顶部封面图 -->
+  <view class="cover-section">
+    <image class="activity-cover" src="{{activity.coverUrl || defaultCover}}" mode="aspectFill"></image>
+    <view class="cover-info">
+      <view class="activity-title">{{activity.title}}</view>
+      <view class="activity-status {{activity.status === 'recruiting' ? 'status-recruiting' : (activity.status === 'ongoing' ? 'status-ongoing' : 'status-finished')}}">
+        {{activity.status === 'recruiting' ? '招募中' : (activity.status === 'ongoing' ? '进行中' : '已结束')}}
+      </view>
+    </view>
+  </view>
+
+  <!-- 基本信息 -->
+  <view class="info-section">
+    <view class="info-item">
+      <view class="info-label">阅读书籍</view>
+      <view class="book-info" bindtap="viewBookDetail">
+        <image class="book-cover" src="{{activity.book.coverUrl || defaultBookCover}}" mode="aspectFill"></image>
+        <view class="book-text">
+          <view class="book-title">{{activity.book.title}}</view>
+          <view class="book-author">{{activity.book.author}}</view>
+        </view>
+        <view class="book-arrow"></view>
+      </view>
+    </view>
+
+    <view class="info-item">
+      <view class="info-label">活动时间</view>
+      <view class="info-value">{{activity.startDate}} 至 {{activity.endDate}}</view>
+    </view>
+
+    <view class="info-item">
+      <view class="info-label">参与人数</view>
+      <view class="info-value">{{activity.currentParticipants || 0}}/{{activity.maxParticipants || '不限'}}</view>
+    </view>
+
+    <view class="info-item">
+      <view class="info-label">发起人</view>
+      <view class="creator-info">
+        <image class="creator-avatar" src="{{activity.creator.avatarUrl}}" mode="aspectFill"></image>
+        <view class="creator-name">{{activity.creator.nickname}}</view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 活动详情 -->
+  <view class="detail-section">
+    <view class="section-title">活动详情</view>
+    <view class="detail-content">{{activity.description}}</view>
+  </view>
+
+  <!-- 活动规则 -->
+  <view class="rules-section">
+    <view class="section-title">活动规则</view>
+    <view class="rule-list">
+      <view class="rule-item" wx:for="{{activity.rules}}" wx:key="index">
+        <view class="rule-number">{{index + 1}}</view>
+        <view class="rule-content">{{item}}</view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 打卡要求 -->
+  <view class="checkin-section">
+    <view class="section-title">打卡要求</view>
+    <view class="checkin-type">
+      <text class="type-label">打卡类型：</text>
+      <text class="type-value">{{activity.checkInRequirement === 'daily' ? '每日打卡' : '自由打卡'}}</text>
+    </view>
+    <block wx:if="{{activity.checkInRequirement === 'daily'}}">
+      <view class="checkin-time">
+        <text class="time-label">打卡时间：</text>
+        <text class="time-value">每日 {{activity.checkInStartTime || '00:00'}} - {{activity.checkInEndTime || '23:59'}}</text>
+      </view>
+    </block>
+    <view class="checkin-content">
+      <text class="content-label">打卡内容：</text>
+      <view class="content-types">
+        <view class="content-type-item" wx:for="{{activity.checkInContent}}" wx:key="index">
+          <block wx:if="{{item === 'text'}}">文字</block>
+          <block wx:elif="{{item === 'image'}}">图片</block>
+          <block wx:elif="{{item === 'audio'}}">语音</block>
+          <block wx:elif="{{item === 'video'}}">视频</block>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 参与成员 -->
+  <view class="members-section">
+    <view class="section-header">
+      <view class="section-title">参与成员</view>
+      <view class="view-all" bindtap="viewAllMembers" wx:if="{{activity.participants.length > 6}}">查看全部</view>
+    </view>
+    <view class="members-list">
+      <view class="member-item" wx:for="{{activity.participants}}" wx:key="id" wx:if="{{index < 6}}">
+        <image class="member-avatar" src="{{item.avatarUrl}}" mode="aspectFill"></image>
+        <view class="member-name">{{item.nickname}}</view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 打卡记录 -->
+  <view class="records-section">
+    <view class="section-header">
+      <view class="section-title">最新打卡</view>
+      <view class="view-all" bindtap="viewAllRecords" wx:if="{{activity.checkInRecords.length > 0}}">查看全部</view>
+    </view>
+    <view class="records-list" wx:if="{{activity.checkInRecords.length > 0}}">
+      <view class="record-item" wx:for="{{activity.checkInRecords}}" wx:key="id" wx:if="{{index < 3}}">
+        <view class="record-user">
+          <image class="record-avatar" src="{{item.user.avatarUrl}}" mode="aspectFill"></image>
+          <view class="record-info">
+            <view class="record-name">{{item.user.nickname}}</view>
+            <view class="record-time">{{item.createTime}}</view>
+          </view>
+        </view>
+        <view class="record-content">{{item.content}}</view>
+        <view class="record-images" wx:if="{{item.images && item.images.length > 0}}">
+          <image class="record-image" wx:for="{{item.images}}" wx:for-item="img" wx:key="index" src="{{img}}" mode="aspectFill" bindtap="previewImage" data-src="{{img}}" data-urls="{{item.images}}"></image>
+        </view>
+      </view>
+    </view>
+    <view class="no-records" wx:else>
+      <image src="/static/images/no-data.png" mode="aspectFit"></image>
+      <text>暂无打卡记录</text>
+    </view>
+  </view>
+
+  <!-- 底部占位 -->
+  <view class="bottom-placeholder"></view>
+
+  <!-- 底部操作栏 -->
+  <view class="bottom-bar">
+    <block wx:if="{{isCreator}}">
+      <button class="bottom-btn edit-btn" bindtap="editActivity">编辑活动</button>
+    </block>
+    <block wx:else>
+      <button class="bottom-btn {{hasJoined ? 'quit-btn' : 'join-btn'}}" bindtap="toggleJoin">
+        {{hasJoined ? '退出活动' : '参与活动'}}
+      </button>
+    </block>
+    <button class="bottom-btn checkin-btn" bindtap="goToCheckIn" wx:if="{{hasJoined}}">打卡</button>
+    <button class="bottom-btn share-btn" open-type="share">分享</button>
+  </view>
+</view> 

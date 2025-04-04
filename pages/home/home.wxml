@@ -1,0 +1,132 @@
+<view class="container">
+  <!-- 顶部主办方展示区 -->
+  <view class="organizer-section">
+    <image class="organizer-logo" src="{{organizer.logo}}" mode="aspectFit"></image>
+    <view class="organizer-info">
+      <view class="app-title">{{organizer.name}}</view>
+      <view class="organizer-slogan">{{organizer.slogan}}</view>
+    </view>
+  </view>
+
+  <!-- 顶部轮播图 -->
+  <swiper class="banner-swiper" indicator-dots="{{true}}" autoplay="{{true}}" interval="5000" circular="{{true}}">
+    <swiper-item>
+      <image src="/static/images/banner.png" class="banner-image" mode="aspectFill"></image>
+    </swiper-item>
+    <swiper-item>
+      <image src="/static/images/banner1.png" class="banner-image" mode="aspectFill"></image>
+    </swiper-item>
+    <swiper-item>
+      <image src="/static/images/banner2.png" class="banner-image" mode="aspectFill"></image>
+    </swiper-item>
+  </swiper>
+  
+  <!-- 每日推荐 -->
+  <view class="daily-recommend-card">
+    <view class="recommend-header">
+      <text class="recommend-title">每日推荐</text>
+      <text class="recommend-more" bindtap="viewMoreRecommends">更多推荐</text>
+    </view>
+    <view class="recommend-content" bindtap="viewRecommendBook">
+      <image class="recommend-book-cover" src="{{dailyRecommend.cover}}" mode="aspectFill"></image>
+      <view class="recommend-info">
+        <view class="recommend-book-title">{{dailyRecommend.title}}</view>
+        <view class="recommend-book-author">{{dailyRecommend.author}}</view>
+        <view class="recommend-book-desc">{{dailyRecommend.description}}</view>
+        <view class="recommend-btn">立即阅读</view>
+      </view>
+    </view>
+  </view>
+  
+  <!-- 快捷入口区 -->
+  <view class="quick-entry-section">
+    <view class="create-activity-entry" bindtap="goToCreateActivity">
+      <image class="entry-icon" src="/static/images/icon-create.png" mode="aspectFit"></image>
+      <text class="entry-text">创建活动</text>
+    </view>
+    <view class="join-activity-entry" bindtap="goToActivityList">
+      <image class="entry-icon" src="/static/images/icon-join.png" mode="aspectFit"></image>
+      <text class="entry-text">加入活动</text>
+    </view>
+    <view class="my-books-entry" bindtap="goToMyBooks">
+      <image class="entry-icon" src="/static/images/icon-books.png" mode="aspectFit"></image>
+      <text class="entry-text">我的书架</text>
+    </view>
+    <view class="checkin-entry" bindtap="goToCheckin">
+      <image class="entry-icon" src="/static/images/icon-checkin.png" mode="aspectFit"></image>
+      <text class="entry-text">今日打卡</text>
+    </view>
+  </view>
+  
+  <!-- 创建活动卡片 -->
+  <view class="create-activity-card" bindtap="goToCreateActivity">
+    <view class="card-title">创建共读活动</view>
+    <view class="card-desc">邀请好友一起阅读，分享阅读乐趣</view>
+    <view class="card-btn-container">
+      <view class="card-btn">立即创建</view>
+    </view>
+  </view>
+  
+  <view class="section-title">推荐活动</view>
+  <view class="activity-list">
+    <block wx:if="{{hotActivities.length > 0}}">
+      <view 
+        wx:for="{{hotActivities}}" 
+        wx:key="id" 
+        class="activity-item" 
+        bindtap="goToActivityDetail" 
+        data-id="{{item.id}}"
+      >
+        <image class="activity-image" src="{{activities[index].coverUrl || '/static/images/activity-cover.png'}}" mode="aspectFill"></image>
+        <view class="activity-info">
+          <view class="activity-title">{{item.title}}</view>
+          <view class="activity-desc">{{activities[index].description || '点击查看活动详情'}}</view>
+          <view class="activity-meta">
+            <text class="activity-participants">{{item.participants}}人参与</text>
+            <text class="activity-status {{item.status === 'recruiting' ? 'recruiting' : (item.status === 'ongoing' ? 'ongoing' : 'finished')}}">
+              {{item.status === 'recruiting' ? '招募中' : (item.status === 'ongoing' ? '进行中' : '已结束')}}
+            </text>
+          </view>
+        </view>
+      </view>
+    </block>
+    <view wx:if="{{hotActivities.length === 0}}" class="empty-tip">暂无推荐活动</view>
+  </view>
+  
+  <view class="section-title">热门图书</view>
+  <view class="book-list">
+    <block wx:if="{{popularBooks.length > 0}}">
+      <view 
+        wx:for="{{popularBooks}}" 
+        wx:key="id" 
+        class="book-item"
+      >
+        <image class="book-cover" src="{{item.cover}}" mode="aspectFill"></image>
+        <view class="book-info">
+          <view class="book-title">{{item.title}}</view>
+          <view class="book-author">{{item.author}}</view>
+        </view>
+      </view>
+    </block>
+    <view wx:if="{{popularBooks.length === 0}}" class="empty-tip">暂无热门图书</view>
+  </view>
+
+  <!-- 热门活动 -->
+  <view class="module-section hot-activities" wx:if="{{hotActivities.length > 0}}">
+    <view class="module-header">
+      <text class="module-title">热门活动</text>
+      <text class="module-more" bindtap="goToActivityList">查看全部</text>
+    </view>
+    <view class="hot-activities-list">
+      <view class="activity-item" wx:for="{{hotActivities}}" wx:key="id" bindtap="goToActivityDetail" data-id="{{item.id}}">
+        <view class="activity-name">{{item.title}}</view>
+        <view class="activity-info">
+          <view class="activity-participants">{{item.participants}}人参与</view>
+          <view class="activity-tag {{item.status === 'recruiting' ? 'tag-recruiting' : (item.status === 'ongoing' ? 'tag-ongoing' : 'tag-finished')}}">
+            {{item.status === 'recruiting' ? '招募中' : (item.status === 'ongoing' ? '进行中' : '已结束')}}
+          </view>
+        </view>
+      </view>
+    </view>
+  </view>
+</view> 

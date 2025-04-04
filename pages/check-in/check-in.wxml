@@ -1,0 +1,118 @@
+<!--pages/check-in/check-in.wxml-->
+<view class="check-in-container">
+  <!-- 顶部调试按钮 -->
+  <view class="debug-btn" bindtap="toggleDebugMode">调试</view>
+  
+  <!-- 加载状态 -->
+  <view class="loading-container" wx:if="{{loading}}">
+    <view class="loading"></view>
+  </view>
+  
+  <!-- 打卡内容区 -->
+  <view class="check-in-content" wx:if="{{!loading}}">
+    <!-- 活动信息 -->
+    <view class="activity-info">
+      <image class="activity-cover" src="{{activity.coverUrl || defaultCover}}" mode="aspectFill"></image>
+      <view class="activity-meta">
+        <view class="activity-title">{{activity.title || '未知活动'}}</view>
+        <view class="activity-book" wx:if="{{activity.book}}">《{{activity.book.title}}》</view>
+      </view>
+    </view>
+    
+    <!-- 打卡日期 -->
+    <view class="checkin-date">
+      <text>{{currentDateStr}} 打卡</text>
+    </view>
+    
+    <!-- 允许的打卡类型提示 -->
+    <view class="allowed-types">
+      <text class="types-title">允许的打卡类型：</text>
+      <view class="types-list">
+        <view class="type-tag {{allowedContentTypes.includes('text') ? 'active' : ''}}" wx:if="{{allowedContentTypes.includes('text')}}">文本</view>
+        <view class="type-tag {{allowedContentTypes.includes('image') ? 'active' : ''}}" wx:if="{{allowedContentTypes.includes('image')}}">图片</view>
+        <view class="type-tag {{allowedContentTypes.includes('audio') ? 'active' : ''}}" wx:if="{{allowedContentTypes.includes('audio')}}">音频</view>
+        <view class="type-tag {{allowedContentTypes.includes('video') ? 'active' : ''}}" wx:if="{{allowedContentTypes.includes('video')}}">视频</view>
+      </view>
+    </view>
+    
+    <!-- 打卡表单 -->
+    <view class="checkin-form">
+      <!-- 文本内容 -->
+      <view class="form-item">
+        <view class="form-item-title">文字记录</view>
+        <textarea 
+          class="checkin-textarea" 
+          placeholder="分享你今天的阅读感受、心得或收获..." 
+          value="{{checkInData.text}}"
+          bindinput="onTextInput"
+          maxlength="500"
+        ></textarea>
+        <view class="text-counter">{{checkInData.text.length || 0}}/500</view>
+      </view>
+      
+      <!-- 图片内容 -->
+      <view class="form-item">
+        <view class="form-item-title">图片记录</view>
+        <view class="image-uploader">
+          <view class="image-list" wx:if="{{checkInData.imageList.length > 0}}">
+            <view class="image-item" wx:for="{{checkInData.imageList}}" wx:key="index">
+              <image src="{{item}}" mode="aspectFill"></image>
+              <view class="delete-icon" bindtap="deleteImage" data-index="{{index}}">×</view>
+            </view>
+          </view>
+          <view class="upload-button" bindtap="chooseImage" wx:if="{{checkInData.imageList.length < 9}}">
+            <text class="upload-icon">+</text>
+            <text class="upload-text">添加图片</text>
+          </view>
+        </view>
+        <view class="tip-text">最多可上传9张图片</view>
+      </view>
+      
+      <!-- 音频内容 -->
+      <view class="form-item" wx:if="{{allowedContentTypes.includes('audio')}}">
+        <view class="form-item-title">语音记录</view>
+        <view class="audio-uploader">
+          <block wx:if="{{!checkInData.audioPath}}">
+            <view class="upload-button audio-button" bindtap="recordAudio">
+              <text class="upload-icon">🎙️</text>
+              <text class="upload-text">录制语音</text>
+            </view>
+          </block>
+          <block wx:else>
+            <view class="audio-preview">
+              <view class="audio-control" bindtap="playAudio">
+                <text class="audio-icon">▶️</text>
+                <text>播放录音</text>
+              </view>
+              <view class="audio-delete" bindtap="deleteAudio">删除</view>
+            </view>
+          </block>
+        </view>
+      </view>
+      
+      <!-- 视频内容 -->
+      <view class="form-item" wx:if="{{allowedContentTypes.includes('video')}}">
+        <view class="form-item-title">视频记录</view>
+        <view class="video-uploader">
+          <block wx:if="{{!checkInData.videoPath}}">
+            <view class="upload-button video-button" bindtap="recordVideo">
+              <text class="upload-icon">🎬</text>
+              <text class="upload-text">添加视频</text>
+            </view>
+          </block>
+          <block wx:else>
+            <view class="video-preview">
+              <video src="{{checkInData.videoPath}}" class="preview-video"></video>
+              <view class="video-delete" bindtap="deleteVideo">删除</view>
+            </view>
+          </block>
+        </view>
+      </view>
+    </view>
+    
+    <!-- 提交按钮 -->
+    <view class="submit-area">
+      <button class="submit-btn" bindtap="submitCheckIn">提交打卡</button>
+    </view>
+  </view>
+</view> 

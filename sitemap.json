@@ -1,0 +1,7 @@
+{
+  "desc": "阅读越有fun小程序的页面配置",
+  "rules": [{
+    "action": "allow",
+    "page": "*"
+  }]
+} 

@@ -1,0 +1,56 @@
+{
+  "pages": [
+    "pages/home/home",
+    "pages/discover/discover",
+    "pages/myParticipation/myParticipation",
+    "pages/profile/profile",
+    "pages/book-detail/book-detail",
+    "pages/create-activity/create-activity",
+    "pages/select-book/select-book",
+    "pages/activity-detail/activity-detail",
+    "pages/check-in/check-in",
+    "pages/check-in-records/check-in-records"
+  ],
+  "window": {
+    "backgroundTextStyle": "light",
+    "navigationBarBackgroundColor": "#004cff",
+    "navigationBarTitleText": "阅读越有fun",
+    "navigationBarTextStyle": "white"
+  },
+  "tabBar": {
+    "color": "#c9b8b6",
+    "selectedColor": "#004cff",
+    "backgroundColor": "#ffffff",
+    "borderStyle": "black",
+    "list": [
+      {
+        "pagePath": "pages/home/home",
+        "text": "首页",
+        "iconPath": "static/images/tabbar/icon-home.png",
+        "selectedIconPath": "static/images/tabbar/icon-home-active.png"
+      },
+      {
+        "pagePath": "pages/discover/discover",
+        "text": "发现",
+        "iconPath": "static/images/tabbar/icon-discover.png",
+        "selectedIconPath": "static/images/tabbar/icon-discover-active.png"
+      },
+      {
+        "pagePath": "pages/myParticipation/myParticipation",
+        "text": "我的参与",
+        "iconPath": "static/images/tabbar/icon-participation.png",
+        "selectedIconPath": "static/images/tabbar/icon-participation-active.png"
+      },
+      {
+        "pagePath": "pages/profile/profile",
+        "text": "个人中心",
+        "iconPath": "static/images/tabbar/icon-profile.png",
+        "selectedIconPath": "static/images/tabbar/icon-profile-active.png"
+      }
+    ]
+  },
+  "style": "v2",
+  "sitemapLocation": "sitemap.json",
+  "darkmode": true,
+  "themeLocation": "theme.json"
+} 

@@ -1,0 +1,6 @@
+{
+  "navigationBarTitleText": "选择图书",
+  "enablePullDownRefresh": true,
+  "backgroundTextStyle": "dark",
+  "usingComponents": {}
+} 

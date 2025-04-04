@@ -1,0 +1,65 @@
+<!-- 图书选择页面 -->
+<view class="container">
+  <!-- 搜索区域 -->
+  <view class="search-box">
+    <view class="search-input">
+      <icon type="search" size="14" color="#999"></icon>
+      <input 
+        type="text" 
+        placeholder="搜索图书名称/作者" 
+        value="{{searchKeyword}}"
+        bindinput="onSearchInput"
+        confirm-type="search"
+        bindconfirm="onSearch"
+      />
+    </view>
+    <view class="search-btn" bindtap="onSearch">搜索</view>
+  </view>
+
+  <!-- 搜索历史 -->
+  <view class="search-history" wx:if="{{searchHistory.length > 0 && !searchKeyword}}">
+    <view class="history-header">
+      <text>搜索历史</text>
+      <text class="clear-history" bindtap="clearHistory">清除</text>
+    </view>
+    <view class="history-list">
+      <view 
+        class="history-item" 
+        wx:for="{{searchHistory}}" 
+        wx:key="index"
+        bindtap="onHistoryItemTap"
+        data-keyword="{{item}}"
+      >{{item}}</view>
+    </view>
+  </view>
+
+  <!-- 图书列表 -->
+  <view class="book-list">
+    <view 
+      class="book-item" 
+      wx:for="{{bookList}}" 
+      wx:key="id"
+      bindtap="onSelectBook"
+      data-book="{{item}}"
+    >
+      <image class="book-cover" src="{{item.coverUrl || '/static/images/books/default-book-cover.png'}}" mode="aspectFill"></image>
+      <view class="book-info">
+        <view class="book-title">{{item.title}}</view>
+        <view class="book-author">{{item.author}}</view>
+        <view class="book-description">{{item.description}}</view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 加载更多 -->
+  <view class="loading-more" wx:if="{{hasMore}}">
+    <view wx:if="{{isLoading}}">加载中...</view>
+    <view wx:else bindtap="loadMore">加载更多</view>
+  </view>
+
+  <!-- 无数据提示 -->
+  <view class="no-data" wx:if="{{bookList.length === 0 && !isLoading}}">
+    <image src="/static/images/no-data.png" mode="aspectFit"></image>
+    <text>暂无图书数据</text>
+  </view>
+</view> 

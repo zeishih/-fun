@@ -1,0 +1,130 @@
+<view class="container">
+  <!-- 搜索区域 -->
+  <view class="search-container">
+    <view class="search-box">
+      <view class="search-icon"></view>
+      <input 
+        class="search-input" 
+        placeholder="搜索书名、作者或标签" 
+        confirm-type="search"
+        value="{{searchKeyword}}"
+        bindinput="onSearchInput"
+        bindconfirm="onSearchConfirm"
+      />
+      <view class="search-clear" wx:if="{{searchKeyword}}" bindtap="clearSearch"></view>
+    </view>
+    <view class="filter-btn" bindtap="toggleFilterPanel">
+      <view class="filter-icon"></view>
+      <text>筛选</text>
+    </view>
+  </view>
+  
+  <!-- 分类标签 -->
+  <scroll-view class="tags-container" scroll-x enable-flex>
+    <view 
+      class="tag-item {{currentTag === tag.id ? 'active' : ''}}" 
+      wx:for="{{bookTags}}" 
+      wx:for-item="tag" 
+      wx:key="id"
+      data-id="{{tag.id}}"
+      bindtap="selectTag"
+    >
+      {{tag.name}}
+    </view>
+  </scroll-view>
+  
+  <!-- 书籍列表 -->
+  <view class="books-container {{loading ? 'loading' : ''}}">
+    <view wx:if="{{loading}}" class="loading-container">
+      <view class="loading-spinner"></view>
+      <text class="loading-text">加载中...</text>
+    </view>
+    
+    <view wx:elif="{{!books.length}}" class="empty-container">
+      <view class="empty-icon"></view>
+      <text class="empty-text">暂无相关书籍</text>
+      <text class="empty-tips">试试其他关键词或分类吧</text>
+    </view>
+    
+    <view wx:else class="books-list">
+      <book-card 
+        wx:for="{{books}}" 
+        wx:key="id" 
+        book="{{item}}" 
+        bind:tap="navigateToBookDetail"
+      />
+    </view>
+    
+    <!-- 加载更多 -->
+    <view wx:if="{{books.length && hasMore}}" class="load-more" bindtap="loadMore">
+      <text>加载更多</text>
+    </view>
+    <view wx:if="{{books.length && !hasMore}}" class="no-more">
+      <text>没有更多了</text>
+    </view>
+  </view>
+  
+  <!-- 筛选面板 -->
+  <view class="filter-panel {{showFilterPanel ? 'show' : ''}}">
+    <view class="filter-overlay" bindtap="toggleFilterPanel"></view>
+    <view class="filter-content">
+      <view class="filter-header">
+        <text class="filter-title">筛选条件</text>
+        <view class="filter-close" bindtap="toggleFilterPanel"></view>
+      </view>
+      
+      <view class="filter-section">
+        <text class="section-title">类型</text>
+        <view class="filter-tags">
+          <view 
+            class="filter-tag {{selectedCategories.includes(category.id) ? 'active' : ''}}" 
+            wx:for="{{categories}}" 
+            wx:for-item="category" 
+            wx:key="id"
+            data-id="{{category.id}}"
+            bindtap="toggleCategory"
+          >
+            {{category.name}}
+          </view>
+        </view>
+      </view>
+      
+      <view class="filter-section">
+        <text class="section-title">语言</text>
+        <view class="filter-tags">
+          <view 
+            class="filter-tag {{selectedLanguages.includes(language.id) ? 'active' : ''}}" 
+            wx:for="{{languages}}" 
+            wx:for-item="language" 
+            wx:key="id"
+            data-id="{{language.id}}"
+            bindtap="toggleLanguage"
+          >
+            {{language.name}}
+          </view>
+        </view>
+      </view>
+      
+      <view class="filter-section">
+        <text class="section-title">难度</text>
+        <view class="filter-tags">
+          <view 
+            class="filter-tag {{selectedLevels.includes(level.id) ? 'active' : ''}}" 
+            wx:for="{{levels}}" 
+            wx:for-item="level" 
+            wx:key="id"
+            data-id="{{level.id}}"
+            bindtap="toggleLevel"
+          >
+            {{level.name}}
+          </view>
+        </view>
+      </view>
+      
+      <view class="filter-buttons">
+        <button class="reset-btn" bindtap="resetFilters">重置</button>
+        <button class="apply-btn" bindtap="applyFilters">确定</button>
+      </view>
+    </view>
+  </view>
+</view> 

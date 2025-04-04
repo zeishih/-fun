@@ -1,0 +1,60 @@
+{
+  "colors": {
+    "primary": {
+      "50": "#f5f8ff",
+      "100": "#d7e3fe",
+      "200": "#b6cbfb",
+      "300": "#86a8f9",
+      "400": "#3872fa",
+      "500": "#004cff",
+      "600": "#003dcc",
+      "700": "#0035b3",
+      "800": "#002b8f",
+      "900": "#001e66"
+    },
+    "secondary": {
+      "50": "#ffffff",
+      "100": "#ffffff",
+      "200": "#ebf6e9",
+      "300": "#c8e8c4",
+      "400": "#92d789",
+      "500": "#6bcf5e",
+      "600": "#44c733",
+      "700": "#39b828",
+      "800": "#2ca01d",
+      "900": "#237d17"
+    },
+    "neutral": {
+      "50": "#ffffff",
+      "100": "#ffffff",
+      "200": "#ffffff",
+      "300": "#ffffff",
+      "400": "#f3f2f2",
+      "500": "#ddd6d5",
+      "600": "#c9b8b6",
+      "700": "#c2a7a3",
+      "800": "#b98f89",
+      "900": "#aa776f"
+    },
+    "custom": []
+  },
+  "typography": {
+    "headingFont": "font-mono",
+    "bodyFont": "font-sans",
+    "baseFontSize": 17,
+    "lineHeight": 1.4,
+    "headingScale": 1.28,
+    "headingWeight": 2
+  },
+  "ui": {
+    "borderRadius": 11,
+    "shadowLevel": 0,
+    "spacingScale": 0.8500000000000001,
+    "buttonStyle": 1,
+    "animationLevel": 1
+  },
+  "meta": {
+    "exportTime": "2025-04-01T07:30:47.230Z",
+    "version": "1.0"
+  }
+}

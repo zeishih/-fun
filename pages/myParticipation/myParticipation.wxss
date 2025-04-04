@@ -1,0 +1,263 @@
+/* pages/myParticipation/myParticipation.wxss */
+.participation-container {
+  padding: 30rpx;
+}
+
+/* 页面标题 */
+.page-header {
+  margin-bottom: 40rpx;
+}
+
+/* 加载状态 */
+.loading-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 200rpx;
+}
+
+.loading {
+  width: 60rpx;
+  height: 60rpx;
+  border-radius: 50%;
+  border: 6rpx solid var(--primary-200);
+  border-top-color: var(--primary-500);
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* 内容区域 */
+.content-container {
+  display: flex;
+  flex-direction: column;
+}
+
+/* 通用部分样式 */
+.section {
+  margin-bottom: 50rpx;
+}
+
+.section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20rpx;
+}
+
+.empty-list {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100rpx;
+  color: var(--neutral-700);
+  font-size: 28rpx;
+}
+
+/* 活动卡片 */
+.activity-card {
+  padding: 30rpx;
+  margin-bottom: 20rpx;
+}
+
+.activity-info {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 20rpx;
+}
+
+.activity-title {
+  font-size: 32rpx;
+  font-weight: bold;
+  margin-bottom: 10rpx;
+  color: var(--text-color);
+}
+
+.activity-date {
+  font-size: 26rpx;
+  color: var(--neutral-700);
+}
+
+.progress-container {
+  display: flex;
+  align-items: center;
+}
+
+.progress-bar {
+  flex: 1;
+  height: 16rpx;
+  background-color: var(--neutral-400);
+  border-radius: 8rpx;
+  overflow: hidden;
+  margin-right: 20rpx;
+}
+
+.progress-inner {
+  height: 100%;
+  background-color: var(--primary-500);
+  border-radius: 8rpx;
+}
+
+.progress-text {
+  font-size: 24rpx;
+  color: var(--primary-500);
+  font-weight: bold;
+  width: 60rpx;
+  text-align: right;
+}
+
+/* 打卡卡片 */
+.checkin-card {
+  padding: 30rpx;
+  margin-bottom: 20rpx;
+}
+
+.checkin-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20rpx;
+}
+
+.checkin-book {
+  display: flex;
+  flex-direction: column;
+}
+
+.checkin-book .book-title {
+  font-size: 28rpx;
+  font-weight: bold;
+  margin-bottom: 8rpx;
+  color: var(--text-color);
+}
+
+.checkin-date {
+  font-size: 24rpx;
+  color: var(--neutral-700);
+}
+
+.checkin-type {
+  font-size: 24rpx;
+  padding: 8rpx 20rpx;
+  border-radius: 30rpx;
+  font-weight: bold;
+}
+
+.checkin-type.text {
+  background-color: var(--primary-100);
+  color: var(--primary-500);
+}
+
+.checkin-type.image {
+  background-color: var(--secondary-200);
+  color: var(--secondary-800);
+}
+
+.checkin-type.voice {
+  background-color: #f0e6ff;
+  color: #6200ee;
+}
+
+.checkin-type.video {
+  background-color: #ffecf1;
+  color: #c5176c;
+}
+
+.checkin-content {
+  font-size: 28rpx;
+  color: var(--text-color);
+  line-height: 1.5;
+}
+
+/* 组队卡片 */
+.team-card {
+  padding: 30rpx;
+  margin-bottom: 20rpx;
+}
+
+.team-info {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 15rpx;
+}
+
+.team-name {
+  font-size: 32rpx;
+  font-weight: bold;
+  color: var(--text-color);
+}
+
+.team-members {
+  font-size: 26rpx;
+  color: var(--neutral-700);
+  background-color: var(--neutral-400);
+  padding: 6rpx 20rpx;
+  border-radius: 20rpx;
+}
+
+.team-books {
+  display: flex;
+  align-items: center;
+  font-size: 26rpx;
+}
+
+.books-label {
+  color: var(--neutral-800);
+  margin-right: 10rpx;
+}
+
+.books-list {
+  color: var(--primary-500);
+  flex: 1;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* 收藏列表 */
+.favorites-list {
+  display: flex;
+  flex-wrap: nowrap;
+  overflow-x: auto;
+  gap: 30rpx;
+  padding: 10rpx 0;
+}
+
+.favorite-item {
+  display: flex;
+  flex-direction: column;
+  width: 180rpx;
+  flex-shrink: 0;
+}
+
+.book-thumbnail {
+  width: 180rpx;
+  height: 240rpx;
+  border-radius: calc(var(--border-radius) / 2);
+  box-shadow: 0 4rpx 8rpx rgba(0, 0, 0, 0.1);
+  margin-bottom: 15rpx;
+}
+
+.favorite-item .book-title {
+  font-size: 26rpx;
+  font-weight: bold;
+  color: var(--text-color);
+  margin-bottom: 6rpx;
+  width: 100%;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.favorite-item .book-author {
+  font-size: 22rpx;
+  color: var(--neutral-700);
+  width: 100%;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+} 

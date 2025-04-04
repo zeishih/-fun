@@ -1,0 +1,83 @@
+<view class="profile-container">
+  <!-- 用户信息卡片 -->
+  <view class="user-card card">
+    <view class="user-header">
+      <image class="user-avatar" src="{{userInfo.avatarUrl}}" mode="aspectFill"></image>
+      <view class="user-info">
+        <text class="user-name">{{userInfo.nickName}}</text>
+        <view class="user-level">
+          <text class="level-text">Lv.{{userInfo.level}}</text>
+          <view class="level-bar">
+            <view class="level-progress" style="width: {{userInfo.points % 100}}%;"></view>
+          </view>
+        </view>
+        <text class="join-date">加入时间：{{userInfo.joinDate}}</text>
+      </view>
+    </view>
+    <view class="user-stats">
+      <view class="stat-item">
+        <text class="stat-value">{{userInfo.points}}</text>
+        <text class="stat-label">积分</text>
+      </view>
+      <view class="stat-item">
+        <text class="stat-value">{{badges.length}}</text>
+        <text class="stat-label">勋章</text>
+      </view>
+    </view>
+  </view>
+  
+  <!-- 功能菜单 -->
+  <view class="menu-section card">
+    <view class="menu-item" bindtap="navigateToNotifications">
+      <view class="menu-icon notification-icon"></view>
+      <text class="menu-text">消息通知</text>
+      <view class="menu-right">
+        <view wx:if="{{notifications > 0}}" class="notification-badge">{{notifications}}</view>
+        <view class="menu-arrow"></view>
+      </view>
+    </view>
+    
+    <view class="menu-item" bindtap="toggleDarkMode">
+      <view class="menu-icon theme-icon"></view>
+      <text class="menu-text">暗黑模式</text>
+      <view class="menu-right">
+        <switch checked="{{darkMode}}" color="#004cff"></switch>
+      </view>
+    </view>
+    
+    <view class="menu-item" bindtap="navigateToSettings">
+      <view class="menu-icon settings-icon"></view>
+      <text class="menu-text">设置</text>
+      <view class="menu-right">
+        <view class="menu-arrow"></view>
+      </view>
+    </view>
+  </view>
+  
+  <!-- 勋章展示 -->
+  <view class="badges-section">
+    <view class="section-header">
+      <text class="h2">我的勋章</text>
+    </view>
+    
+    <view class="badges-container card">
+      <view wx:if="{{badges.length > 0}}" class="badges-list">
+        <view wx:for="{{badges}}" wx:key="id" class="badge-item">
+          <image class="badge-icon" src="{{item.icon}}" mode="aspectFit"></image>
+          <view class="badge-info">
+            <text class="badge-name">{{item.name}}</text>
+            <text class="badge-date">获得时间：{{item.date}}</text>
+          </view>
+        </view>
+      </view>
+      <view wx:else class="empty-badges">
+        <text>暂无获得的勋章</text>
+      </view>
+    </view>
+  </view>
+  
+  <!-- 版本信息 -->
+  <view class="version-info">
+    <text>阅读越有fun v0.1.0</text>
+  </view>
+</view> 

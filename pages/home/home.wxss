@@ -1,0 +1,556 @@
+/* pages/home/home.wxss */
+.home-container {
+  padding: 30rpx;
+}
+
+/* 页面标题 */
+.page-header {
+  margin-bottom: 40rpx;
+}
+
+/* 加载状态 */
+.loading-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 200rpx;
+}
+
+.loading {
+  width: 60rpx;
+  height: 60rpx;
+  border-radius: 50%;
+  border: 6rpx solid var(--primary-200);
+  border-top-color: var(--primary-500);
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* 内容区域 */
+.content-container {
+  display: flex;
+  flex-direction: column;
+}
+
+/* 通用部分样式 */
+.section {
+  margin-bottom: 50rpx;
+}
+
+.section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20rpx;
+}
+
+/* 每日推荐 */
+.daily-recommend {
+  display: flex;
+  padding: 30rpx;
+  border-radius: var(--border-radius);
+}
+
+.book-cover {
+  width: 200rpx;
+  height: 280rpx;
+  border-radius: calc(var(--border-radius) / 2);
+  box-shadow: 0 4rpx 8rpx rgba(0, 0, 0, 0.1);
+  margin-right: 30rpx;
+  flex-shrink: 0;
+}
+
+.book-info {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+.book-title {
+  font-size: 36rpx;
+  font-weight: bold;
+  margin-bottom: 10rpx;
+  color: var(--text-color);
+}
+
+.book-author {
+  font-size: 28rpx;
+  color: var(--neutral-800);
+  margin-bottom: 20rpx;
+}
+
+.book-desc {
+  font-size: 28rpx;
+  color: var(--neutral-700);
+  margin-bottom: 30rpx;
+  line-height: 1.5;
+  flex: 1;
+}
+
+/* 热门活动 */
+.hot-activities-list {
+  margin-top: 20rpx;
+}
+
+.activity-item {
+  background-color: #fff;
+  padding: 30rpx;
+  margin-bottom: 20rpx;
+  border-radius: 12rpx;
+  box-shadow: 0 2rpx 10rpx rgba(0, 0, 0, 0.05);
+}
+
+.activity-name {
+  font-size: 32rpx;
+  font-weight: bold;
+  margin-bottom: 16rpx;
+  color: #333;
+}
+
+.activity-info {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 26rpx;
+  margin-top: 12rpx;
+}
+
+.activity-participants {
+  color: #666;
+  background-color: #f5f5f5;
+  padding: 6rpx 16rpx;
+  border-radius: 20rpx;
+  margin-left: 10rpx;
+}
+
+.activity-tag {
+  padding: 6rpx 20rpx;
+  border-radius: 20rpx;
+  color: #fff;
+  font-size: 24rpx;
+  text-align: center;
+  min-width: 100rpx;
+  display: inline-block;
+  margin-right: 10rpx;
+  float: right;
+}
+
+.tag-recruiting {
+  background-color: #ff9500;
+}
+
+.tag-ongoing {
+  background-color: #007aff;
+}
+
+.tag-finished {
+  background-color: #8e8e93;
+}
+
+/* 最新参与用户 */
+.user-list {
+  display: flex;
+  flex-wrap: nowrap;
+  overflow-x: auto;
+  gap: 30rpx;
+  padding: 10rpx 0;
+}
+
+.user-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 120rpx;
+  flex-shrink: 0;
+}
+
+.user-avatar {
+  width: 90rpx;
+  height: 90rpx;
+  border-radius: 50%;
+  border: 4rpx solid var(--primary-300);
+  margin-bottom: 10rpx;
+}
+
+.user-name {
+  font-size: 24rpx;
+  color: var(--text-color);
+  text-align: center;
+  width: 100%;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.user-active-time {
+  font-size: 20rpx;
+  color: var(--neutral-700);
+  text-align: center;
+}
+
+/* 热门书籍 */
+.book-list {
+  display: flex;
+  flex-wrap: nowrap;
+  overflow-x: auto;
+  gap: 30rpx;
+  padding: 20rpx;
+  background-color: #ffffff;
+  border-radius: 16rpx;
+  box-shadow: 0 2rpx 10rpx rgba(0, 0, 0, 0.05);
+}
+
+.book-item {
+  display: flex;
+  flex-direction: column;
+  width: 180rpx;
+  flex-shrink: 0;
+}
+
+.book-cover {
+  width: 180rpx;
+  height: 240rpx;
+  border-radius: 8rpx;
+  margin-bottom: 12rpx;
+  box-shadow: 0 4rpx 8rpx rgba(0, 0, 0, 0.1);
+}
+
+.book-info {
+  width: 100%;
+}
+
+.book-title {
+  font-size: 26rpx;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 4rpx;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.book-author {
+  font-size: 22rpx;
+  color: #999;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* 首页样式 */
+.container {
+  display: flex;
+  flex-direction: column;
+  padding: 20rpx;
+  background-color: #f7f7f7;
+}
+
+/* 主办方展示区 */
+.organizer-section {
+  display: flex;
+  align-items: center;
+  padding: 20rpx;
+  margin-bottom: 20rpx;
+  border-radius: 16rpx;
+  background: linear-gradient(to right, rgba(73, 133, 230, 0.1), rgba(90, 102, 209, 0.1));
+  box-shadow: 0 2rpx 8rpx rgba(0, 0, 0, 0.05);
+}
+
+.organizer-logo {
+  width: 100rpx;
+  height: 100rpx;
+  border-radius: 50rpx;
+  margin-right: 20rpx;
+  background-color: #fff;
+  box-shadow: 0 4rpx 8rpx rgba(0, 0, 0, 0.1);
+  border: 4rpx solid rgba(73, 133, 230, 0.3);
+}
+
+.organizer-info {
+  flex: 1;
+}
+
+.app-title {
+  font-size: 34rpx;
+  font-weight: bold;
+  color: #4985e6;
+  margin-bottom: 6rpx;
+}
+
+.organizer-slogan {
+  font-size: 24rpx;
+  color: #666;
+}
+
+/* 轮播图样式 */
+.banner-swiper {
+  width: 100%;
+  height: 280rpx;
+  border-radius: 16rpx;
+  overflow: hidden;
+  margin-bottom: 20rpx;
+  box-shadow: 0 2rpx 8rpx rgba(0, 0, 0, 0.05);
+}
+
+.banner-image {
+  width: 100%;
+  height: 100%;
+}
+
+/* 快捷入口区域 */
+.quick-entry-section {
+  display: flex;
+  justify-content: space-between;
+  padding: 24rpx;
+  background-color: #ffffff;
+  border-radius: 16rpx;
+  margin-bottom: 20rpx;
+  box-shadow: 0 2rpx 8rpx rgba(0, 0, 0, 0.05);
+}
+
+.create-activity-entry, .join-activity-entry, .my-books-entry, .checkin-entry {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 25%;
+}
+
+.entry-icon {
+  width: 80rpx;
+  height: 80rpx;
+  margin-bottom: 10rpx;
+}
+
+.entry-text {
+  font-size: 24rpx;
+  color: #333;
+}
+
+/* 每日推荐样式 */
+.daily-recommend-card {
+  background-color: #ffffff;
+  border-radius: 16rpx;
+  padding: 24rpx;
+  margin-bottom: 20rpx;
+  box-shadow: 0 2rpx 8rpx rgba(0, 0, 0, 0.05);
+}
+
+.recommend-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20rpx;
+}
+
+.recommend-title {
+  font-size: 30rpx;
+  font-weight: bold;
+  color: #333;
+}
+
+.recommend-more {
+  font-size: 24rpx;
+  color: #4985e6;
+}
+
+.recommend-content {
+  display: flex;
+}
+
+.recommend-book-cover {
+  width: 180rpx;
+  height: 250rpx;
+  border-radius: 8rpx;
+  box-shadow: 0 4rpx 8rpx rgba(0, 0, 0, 0.15);
+  margin-right: 24rpx;
+  flex-shrink: 0;
+}
+
+.recommend-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.recommend-book-title {
+  font-size: 32rpx;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 8rpx;
+}
+
+.recommend-book-author {
+  font-size: 24rpx;
+  color: #666;
+  margin-bottom: 16rpx;
+}
+
+.recommend-book-desc {
+  font-size: 26rpx;
+  color: #666;
+  line-height: 1.5;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  margin-bottom: 20rpx;
+  flex: 1;
+}
+
+.recommend-btn {
+  align-self: flex-start;
+  font-size: 26rpx;
+  color: #ffffff;
+  background-color: #4985e6;
+  padding: 10rpx 30rpx;
+  border-radius: 100rpx;
+}
+
+.create-activity-card {
+  background: linear-gradient(135deg, #5a66d1, #4985e6);
+  border-radius: 16rpx;
+  padding: 30rpx;
+  margin-bottom: 40rpx;
+  position: relative;
+  color: #ffffff;
+}
+
+.card-title {
+  font-size: 36rpx;
+  font-weight: bold;
+  margin-bottom: 16rpx;
+}
+
+.card-desc {
+  font-size: 26rpx;
+  opacity: 0.9;
+  margin-bottom: 30rpx;
+}
+
+.card-btn-container {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+}
+
+.card-btn {
+  display: inline-block;
+  background-color: #ffffff;
+  color: #4985e6;
+  font-size: 28rpx;
+  font-weight: bold;
+  padding: 14rpx 40rpx;
+  border-radius: 100rpx;
+  text-align: center;
+}
+
+.section-title {
+  font-size: 32rpx;
+  font-weight: bold;
+  margin: 30rpx 0 20rpx;
+  position: relative;
+  padding-left: 20rpx;
+}
+
+.section-title::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 6rpx;
+  height: 30rpx;
+  width: 8rpx;
+  background-color: #4985e6;
+  border-radius: 4rpx;
+}
+
+.activity-list {
+  display: flex;
+  flex-direction: column;
+  background-color: #ffffff;
+  border-radius: 16rpx;
+  padding: 20rpx;
+  box-shadow: 0 2rpx 10rpx rgba(0, 0, 0, 0.05);
+}
+
+.activity-item {
+  display: flex;
+  padding: 20rpx 0;
+  border-bottom: 1rpx solid #f2f2f2;
+}
+
+.activity-item:last-child {
+  border-bottom: none;
+}
+
+.activity-image {
+  width: 180rpx;
+  height: 180rpx;
+  border-radius: 12rpx;
+  margin-right: 20rpx;
+  flex-shrink: 0;
+}
+
+.activity-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.activity-title {
+  font-size: 30rpx;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 8rpx;
+}
+
+.activity-desc {
+  font-size: 26rpx;
+  color: #666;
+  margin-bottom: 20rpx;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.activity-meta {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.activity-participants {
+  font-size: 24rpx;
+  color: #999;
+}
+
+.activity-status {
+  font-size: 22rpx;
+  padding: 4rpx 12rpx;
+  border-radius: 20rpx;
+  color: #fff;
+}
+
+.activity-status.ongoing {
+  background-color: #34c759;
+}
+
+.activity-status.recruiting {
+  background-color: #ff9500;
+}
+
+.activity-status.finished {
+  background-color: #8e8e93;
+}
+
+.empty-tip {
+  text-align: center;
+  padding: 40rpx 0;
+  color: #999;
+  font-size: 28rpx;
+} 

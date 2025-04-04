@@ -1,0 +1,328 @@
+/* pages/check-in/check-in.wxss */
+.check-in-container {
+  min-height: 100vh;
+  background-color: #f8f9fc;
+  padding-bottom: 40rpx;
+  position: relative;
+}
+
+/* 调试按钮 */
+.debug-btn {
+  position: absolute;
+  top: 20rpx;
+  right: 20rpx;
+  background-color: #f0f0f0;
+  color: #666;
+  font-size: 24rpx;
+  padding: 8rpx 16rpx;
+  border-radius: 20rpx;
+  z-index: 100;
+}
+
+/* 加载状态 */
+.loading-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 400rpx;
+}
+
+.loading {
+  width: 60rpx;
+  height: 60rpx;
+  border-radius: 50%;
+  border: 6rpx solid #e6e8f1;
+  border-top-color: #0078d7;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* 打卡内容区 */
+.check-in-content {
+  padding: 30rpx;
+}
+
+/* 活动信息 */
+.activity-info {
+  display: flex;
+  background-color: #fff;
+  padding: 20rpx;
+  border-radius: 12rpx;
+  box-shadow: 0 2rpx 10rpx rgba(0, 0, 0, 0.05);
+  margin-bottom: 30rpx;
+}
+
+.activity-cover {
+  width: 120rpx;
+  height: 160rpx;
+  border-radius: 8rpx;
+  margin-right: 20rpx;
+  background-color: #f2f2f2;
+}
+
+.activity-meta {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.activity-title {
+  font-size: 32rpx;
+  font-weight: bold;
+  color: #333333;
+  margin-bottom: 8rpx;
+}
+
+.activity-book {
+  font-size: 28rpx;
+  color: #666666;
+}
+
+/* 打卡日期 */
+.checkin-date {
+  text-align: center;
+  color: #666;
+  font-size: 28rpx;
+  margin-bottom: 30rpx;
+  background-color: #fff;
+  padding: 20rpx;
+  border-radius: 12rpx;
+  box-shadow: 0 2rpx 10rpx rgba(0, 0, 0, 0.05);
+}
+
+/* 打卡表单 */
+.checkin-form {
+  margin-bottom: 40rpx;
+}
+
+.form-item {
+  background-color: #fff;
+  border-radius: 12rpx;
+  padding: 20rpx;
+  margin-bottom: 20rpx;
+  box-shadow: 0 2rpx 10rpx rgba(0, 0, 0, 0.05);
+}
+
+/* 文本输入 */
+.checkin-textarea {
+  width: 100%;
+  height: 200rpx;
+  padding: 20rpx;
+  box-sizing: border-box;
+  font-size: 28rpx;
+  line-height: 1.5;
+  border-radius: 8rpx;
+  background-color: #f8f8f8;
+}
+
+/* 图片上传 */
+.image-uploader {
+  width: 100%;
+}
+
+.image-list {
+  display: flex;
+  flex-wrap: wrap;
+  margin-bottom: 20rpx;
+}
+
+.image-item {
+  width: 200rpx;
+  height: 200rpx;
+  margin-right: 20rpx;
+  margin-bottom: 20rpx;
+  position: relative;
+  border-radius: 8rpx;
+  overflow: hidden;
+}
+
+.image-item image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.delete-icon {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 40rpx;
+  height: 40rpx;
+  background-color: rgba(0, 0, 0, 0.6);
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24rpx;
+  z-index: 1;
+}
+
+.upload-button {
+  width: 200rpx;
+  height: 200rpx;
+  background-color: #f8f8f8;
+  border-radius: 8rpx;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 20rpx;
+}
+
+.upload-icon {
+  font-size: 60rpx;
+  color: #999;
+  margin-bottom: 10rpx;
+}
+
+.upload-text {
+  font-size: 24rpx;
+  color: #999;
+}
+
+/* 音频上传 */
+.audio-button {
+  width: 100%;
+  height: 100rpx;
+}
+
+.audio-preview {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20rpx;
+  background-color: #f8f8f8;
+  border-radius: 8rpx;
+}
+
+.audio-control {
+  display: flex;
+  align-items: center;
+}
+
+.audio-icon {
+  margin-right: 10rpx;
+}
+
+.audio-delete {
+  color: #ff4d4f;
+  font-size: 28rpx;
+}
+
+/* 视频上传 */
+.video-preview {
+  width: 100%;
+  position: relative;
+}
+
+.preview-video {
+  width: 100%;
+  height: 350rpx;
+  border-radius: 8rpx;
+}
+
+.video-delete {
+  position: absolute;
+  top: 10rpx;
+  right: 10rpx;
+  background-color: rgba(0, 0, 0, 0.6);
+  color: #fff;
+  font-size: 24rpx;
+  padding: 6rpx 12rpx;
+  border-radius: 4rpx;
+}
+
+/* 提交按钮 */
+.submit-area {
+  padding: 40rpx 0;
+  display: flex;
+  justify-content: center;
+}
+
+.submit-btn {
+  width: 80%;
+  height: 90rpx;
+  line-height: 90rpx;
+  background-color: #0078d7;
+  color: #fff;
+  font-size: 32rpx;
+  font-weight: bold;
+  border-radius: 45rpx;
+  box-shadow: 0 6rpx 12rpx rgba(0, 120, 215, 0.3);
+  text-align: center;
+}
+
+/* 允许的打卡类型 */
+.allowed-types {
+  background-color: #fff;
+  padding: 20rpx;
+  border-radius: 12rpx;
+  margin-bottom: 30rpx;
+  box-shadow: 0 2rpx 10rpx rgba(0, 0, 0, 0.05);
+}
+
+.types-title {
+  font-size: 28rpx;
+  color: #666;
+  margin-bottom: 16rpx;
+  display: block;
+}
+
+.types-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16rpx;
+}
+
+.type-tag {
+  background-color: #f0f0f0;
+  color: #666;
+  padding: 8rpx 20rpx;
+  border-radius: 30rpx;
+  font-size: 26rpx;
+}
+
+.type-tag.active {
+  background-color: #e6f7ff;
+  color: #0078d7;
+}
+
+/* 表单项标题 */
+.form-item-title {
+  font-size: 30rpx;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 16rpx;
+  position: relative;
+}
+
+.form-item-title::before {
+  content: "";
+  display: inline-block;
+  width: 8rpx;
+  height: 30rpx;
+  background-color: #0078d7;
+  margin-right: 16rpx;
+  vertical-align: middle;
+  border-radius: 4rpx;
+}
+
+/* 字数统计 */
+.text-counter {
+  text-align: right;
+  font-size: 24rpx;
+  color: #999;
+  margin-top: 10rpx;
+}
+
+/* 提示文本 */
+.tip-text {
+  font-size: 24rpx;
+  color: #999;
+  margin-top: 10rpx;
+} 

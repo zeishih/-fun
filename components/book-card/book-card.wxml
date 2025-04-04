@@ -1,0 +1,30 @@
+<view class="book-card" bind:tap="onTap">
+  <image 
+    class="book-cover" 
+    src="{{book.coverUrl || defaultCover}}" 
+    mode="aspectFill"
+    binderror="onCoverError"
+  />
+  <view class="book-info">
+    <text class="book-title">{{book.title || '未知书名'}}</text>
+    <text class="book-author">{{book.author || '未知作者'}}</text>
+    <view class="book-meta" wx:if="{{showRating}}">
+      <view class="rating">
+        <text class="rating-score">{{book.rating || '暂无评分'}}</text>
+        <view class="rating-stars" wx:if="{{book.rating}}">
+          <block wx:for="{{5}}" wx:key="*this">
+            <view class="star {{item < book.rating ? 'active' : ''}}"></view>
+          </block>
+        </view>
+      </view>
+      <text class="reader-count" wx:if="{{book.readerCount}}">{{book.readerCount}}人在读</text>
+    </view>
+    <view class="book-tags" wx:if="{{book.tags && book.tags.length}}">
+      <text 
+        wx:for="{{book.tags}}" 
+        wx:key="*this" 
+        class="tag"
+      >{{item}}</text>
+    </view>
+  </view>
+</view> 

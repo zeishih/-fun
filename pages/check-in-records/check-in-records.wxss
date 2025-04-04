@@ -1,0 +1,344 @@
+/* pages/check-in-records/check-in-records.wxss */
+.records-container {
+  background-color: #f6f7fb;
+  min-height: 100vh;
+  padding-bottom: 120rpx;
+}
+
+/* 页面头部 */
+.header-section {
+  background-color: #ffffff;
+  padding: 30rpx;
+  margin-bottom: 20rpx;
+}
+
+.activity-info {
+  display: flex;
+  align-items: center;
+}
+
+.activity-cover {
+  width: 120rpx;
+  height: 160rpx;
+  border-radius: 8rpx;
+  margin-right: 20rpx;
+}
+
+.activity-meta {
+  flex: 1;
+}
+
+.activity-title {
+  font-size: 32rpx;
+  font-weight: bold;
+  margin-bottom: 10rpx;
+}
+
+.activity-book {
+  font-size: 26rpx;
+  color: #666;
+}
+
+/* 打卡记录统计 */
+.stats-section {
+  display: flex;
+  background-color: #ffffff;
+  padding: 30rpx 0;
+  margin-bottom: 20rpx;
+}
+
+.stat-item {
+  flex: 1;
+  text-align: center;
+  position: relative;
+}
+
+.stat-item:not(:last-child):after {
+  content: '';
+  position: absolute;
+  right: 0;
+  top: 20%;
+  height: 60%;
+  width: 1px;
+  background-color: #eee;
+}
+
+.stat-value {
+  font-size: 36rpx;
+  font-weight: bold;
+  color: #4285f4;
+  margin-bottom: 10rpx;
+}
+
+.stat-label {
+  font-size: 24rpx;
+  color: #999;
+}
+
+/* 切换筛选 */
+.filter-tabs {
+  display: flex;
+  background-color: #ffffff;
+  margin-bottom: 20rpx;
+}
+
+.tab-item {
+  flex: 1;
+  text-align: center;
+  padding: 20rpx 0;
+  position: relative;
+  font-size: 28rpx;
+  color: #666;
+}
+
+.tab-item.active {
+  color: #4285f4;
+  font-weight: bold;
+}
+
+.tab-item.active:after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 40rpx;
+  height: 4rpx;
+  background-color: #4285f4;
+}
+
+/* 加载状态 */
+.loading-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 40rpx 0;
+}
+
+.loading {
+  width: 60rpx;
+  height: 60rpx;
+  border: 4rpx solid #f3f3f3;
+  border-top: 4rpx solid #4285f4;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* 打卡记录列表 */
+.records-list {
+  padding: 0 20rpx;
+}
+
+.record-item {
+  background-color: #ffffff;
+  margin-bottom: 20rpx;
+  border-radius: 12rpx;
+  padding: 30rpx;
+  box-shadow: 0 2rpx 10rpx rgba(0, 0, 0, 0.05);
+}
+
+.record-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20rpx;
+}
+
+.user-info {
+  display: flex;
+  align-items: center;
+}
+
+.user-avatar {
+  width: 80rpx;
+  height: 80rpx;
+  border-radius: 50%;
+  margin-right: 20rpx;
+}
+
+.user-name {
+  font-size: 28rpx;
+  font-weight: bold;
+  margin-bottom: 4rpx;
+}
+
+.record-time {
+  font-size: 24rpx;
+  color: #999;
+}
+
+.day-badge {
+  font-size: 24rpx;
+  color: #ffffff;
+  background-color: #4285f4;
+  padding: 4rpx 16rpx;
+  border-radius: 20rpx;
+}
+
+.record-content {
+  font-size: 28rpx;
+  line-height: 1.5;
+  margin-bottom: 20rpx;
+  white-space: pre-wrap;
+  word-break: break-all;
+}
+
+/* 图片内容 */
+.image-gallery {
+  margin-bottom: 20rpx;
+}
+
+.gallery-grid {
+  display: grid;
+  grid-gap: 10rpx;
+}
+
+.gallery-image {
+  width: 100%;
+  height: 200rpx;
+  border-radius: 8rpx;
+  object-fit: cover;
+}
+
+/* 语音内容 */
+.audio-player {
+  margin-bottom: 20rpx;
+}
+
+.audio-play {
+  display: flex;
+  align-items: center;
+  background-color: #f5f5f5;
+  padding: 20rpx;
+  border-radius: 40rpx;
+}
+
+.audio-play.playing {
+  background-color: #e8f0fe;
+}
+
+.audio-icon {
+  margin-right: 20rpx;
+  font-size: 32rpx;
+  color: #4285f4;
+}
+
+.audio-desc {
+  font-size: 26rpx;
+  color: #666;
+}
+
+.audio-bars {
+  display: flex;
+  align-items: center;
+}
+
+.bar {
+  width: 6rpx;
+  height: 24rpx;
+  background-color: #4285f4;
+  margin-right: 6rpx;
+  border-radius: 3rpx;
+  animation: sound 1s ease infinite;
+}
+
+.bar:nth-child(2) {
+  animation-delay: 0.2s;
+  height: 32rpx;
+}
+
+.bar:nth-child(3) {
+  animation-delay: 0.4s;
+  height: 28rpx;
+}
+
+@keyframes sound {
+  0% { height: 24rpx; }
+  50% { height: 32rpx; }
+  100% { height: 24rpx; }
+}
+
+/* 视频内容 */
+.video-container {
+  margin-bottom: 20rpx;
+}
+
+.record-video {
+  width: 100%;
+  border-radius: 8rpx;
+}
+
+/* 交互操作 */
+.record-footer {
+  display: flex;
+  padding-top: 20rpx;
+  border-top: 1px solid #f5f5f5;
+}
+
+.record-action {
+  display: flex;
+  align-items: center;
+  margin-right: 30rpx;
+  font-size: 26rpx;
+  color: #666;
+}
+
+.action-icon {
+  margin-right: 8rpx;
+}
+
+.like.liked {
+  color: #ff4d4f;
+}
+
+/* 无记录提示 */
+.empty-records {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 80rpx 0;
+  background-color: #ffffff;
+  margin-bottom: 20rpx;
+}
+
+.empty-records image {
+  width: 200rpx;
+  height: 200rpx;
+  margin-bottom: 20rpx;
+  opacity: 0.6;
+}
+
+.empty-records text {
+  font-size: 28rpx;
+  color: #999;
+  margin-bottom: 30rpx;
+}
+
+/* 底部区域 */
+.bottom-area {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background-color: #ffffff;
+  padding: 20rpx;
+  box-shadow: 0 -2rpx 10rpx rgba(0, 0, 0, 0.05);
+  z-index: 100;
+}
+
+.checkin-btn {
+  background-color: #4285f4;
+  color: #ffffff;
+  border-radius: 40rpx;
+  font-size: 30rpx;
+  padding: 20rpx 0;
+  width: 100%;
+  text-align: center;
+  border: none;
+} 

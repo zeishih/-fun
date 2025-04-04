@@ -1,0 +1,234 @@
+/* pages/profile/profile.wxss */
+.profile-container {
+  padding: 30rpx;
+}
+
+/* 用户信息卡片 */
+.user-card {
+  padding: 30rpx;
+  margin-bottom: 30rpx;
+}
+
+.user-header {
+  display: flex;
+  align-items: center;
+  margin-bottom: 30rpx;
+}
+
+.user-avatar {
+  width: 120rpx;
+  height: 120rpx;
+  border-radius: 50%;
+  border: 4rpx solid var(--primary-300);
+  margin-right: 30rpx;
+}
+
+.user-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.user-name {
+  font-size: 36rpx;
+  font-weight: bold;
+  color: var(--text-color);
+  margin-bottom: 15rpx;
+}
+
+.user-level {
+  display: flex;
+  align-items: center;
+  margin-bottom: 15rpx;
+}
+
+.level-text {
+  font-size: 24rpx;
+  color: var(--primary-500);
+  font-weight: bold;
+  margin-right: 15rpx;
+}
+
+.level-bar {
+  flex: 1;
+  height: 12rpx;
+  background-color: var(--neutral-400);
+  border-radius: 6rpx;
+  overflow: hidden;
+}
+
+.level-progress {
+  height: 100%;
+  background-color: var(--primary-500);
+  border-radius: 6rpx;
+}
+
+.join-date {
+  font-size: 24rpx;
+  color: var(--neutral-700);
+}
+
+.user-stats {
+  display: flex;
+  border-top: 1rpx solid var(--neutral-500);
+  padding-top: 20rpx;
+}
+
+.stat-item {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.stat-value {
+  font-size: 40rpx;
+  font-weight: bold;
+  color: var(--text-color);
+  margin-bottom: 8rpx;
+}
+
+.stat-label {
+  font-size: 24rpx;
+  color: var(--neutral-700);
+}
+
+/* 菜单部分 */
+.menu-section {
+  margin-bottom: 30rpx;
+}
+
+.menu-item {
+  display: flex;
+  align-items: center;
+  padding: 30rpx;
+  border-bottom: 1rpx solid var(--neutral-500);
+}
+
+.menu-item:last-child {
+  border-bottom: none;
+}
+
+.menu-icon {
+  width: 40rpx;
+  height: 40rpx;
+  margin-right: 20rpx;
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
+.notification-icon {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23004cff'%3E%3Cpath d='M12 22c1.1 0 2-.9 2-2h-4c0 1.1.89 2 2 2zm6-6v-5c0-3.07-1.64-5.64-4.5-6.32V4c0-.83-.67-1.5-1.5-1.5s-1.5.67-1.5 1.5v.68C7.63 5.36 6 7.92 6 11v5l-2 2v1h16v-1l-2-2z'/%3E%3C/svg%3E");
+}
+
+.theme-icon {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23004cff'%3E%3Cpath d='M12 3c-4.97 0-9 4.03-9 9s4.03 9 9 9 9-4.03 9-9-4.03-9-9-9zm0 16c-3.86 0-7-3.14-7-7s3.14-7 7-7 7 3.14 7 7-3.14 7-7 7z'/%3E%3Cpath d='M12 5v14c3.86 0 7-3.14 7-7s-3.14-7-7-7z'/%3E%3C/svg%3E");
+}
+
+.settings-icon {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23004cff'%3E%3Cpath d='M19.14 12.94c.04-.3.06-.61.06-.94 0-.32-.02-.64-.07-.94l2.03-1.58c.18-.14.23-.41.12-.61l-1.92-3.32c-.12-.22-.37-.29-.59-.22l-2.39.96c-.5-.38-1.03-.7-1.62-.94l-.36-2.54c-.04-.24-.24-.41-.48-.41h-3.84c-.24 0-.43.17-.47.41l-.36 2.54c-.59.24-1.13.57-1.62.94l-2.39-.96c-.22-.08-.47 0-.59.22L2.74 8.87c-.12.21-.08.47.12.61l2.03 1.58c-.05.3-.09.63-.09.94s.02.64.07.94l-2.03 1.58c-.18.14-.23.41-.12.61l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.38 1.03.7 1.62.94l.36 2.54c.05.24.24.41.48.41h3.84c.24 0 .44-.17.47-.41l.36-2.54c.59-.24 1.13-.56 1.62-.94l2.39.96c.22.08.47 0 .59-.22l1.92-3.32c.12-.22.07-.47-.12-.61l-2.01-1.58zM12 15.6c-1.98 0-3.6-1.62-3.6-3.6s1.62-3.6 3.6-3.6 3.6 1.62 3.6 3.6-1.62 3.6-3.6 3.6z'/%3E%3C/svg%3E");
+}
+
+.menu-text {
+  flex: 1;
+  font-size: 30rpx;
+  color: var(--text-color);
+}
+
+.menu-right {
+  display: flex;
+  align-items: center;
+}
+
+.notification-badge {
+  background-color: var(--primary-500);
+  color: white;
+  font-size: 20rpx;
+  height: 36rpx;
+  min-width: 36rpx;
+  border-radius: 18rpx;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 0 8rpx;
+  margin-right: 15rpx;
+}
+
+.menu-arrow {
+  width: 16rpx;
+  height: 16rpx;
+  border-top: 3rpx solid var(--neutral-700);
+  border-right: 3rpx solid var(--neutral-700);
+  transform: rotate(45deg);
+}
+
+/* 勋章部分 */
+.badges-section {
+  margin-bottom: 30rpx;
+}
+
+.section-header {
+  margin-bottom: 20rpx;
+}
+
+.badges-container {
+  padding: 20rpx;
+}
+
+.badges-list {
+  display: flex;
+  flex-direction: column;
+}
+
+.badge-item {
+  display: flex;
+  align-items: center;
+  padding: 20rpx 0;
+  border-bottom: 1rpx solid var(--neutral-500);
+}
+
+.badge-item:last-child {
+  border-bottom: none;
+}
+
+.badge-icon {
+  width: 80rpx;
+  height: 80rpx;
+  margin-right: 20rpx;
+}
+
+.badge-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.badge-name {
+  font-size: 28rpx;
+  font-weight: bold;
+  color: var(--text-color);
+  margin-bottom: 8rpx;
+}
+
+.badge-date {
+  font-size: 24rpx;
+  color: var(--neutral-700);
+}
+
+.empty-badges {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100rpx;
+  color: var(--neutral-700);
+  font-size: 28rpx;
+}
+
+/* 版本信息 */
+.version-info {
+  text-align: center;
+  font-size: 24rpx;
+  color: var(--neutral-700);
+  margin-top: 60rpx;
+  margin-bottom: 30rpx;
+} 

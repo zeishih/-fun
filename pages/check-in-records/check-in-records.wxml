@@ -1,0 +1,124 @@
+<!--pages/check-in-records/check-in-records.wxml-->
+<view class="records-container">
+  <!-- 页面头部 -->
+  <view class="header-section">
+    <view class="activity-info">
+      <image class="activity-cover" src="{{activity.coverUrl || defaultCover}}" mode="aspectFill"></image>
+      <view class="activity-meta">
+        <view class="activity-title">{{activity.title}}</view>
+        <view class="activity-book">《{{activity.book.title}}》</view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 打卡记录统计 -->
+  <view class="stats-section">
+    <view class="stat-item">
+      <view class="stat-value">{{totalRecords}}</view>
+      <view class="stat-label">总打卡</view>
+    </view>
+    <view class="stat-item">
+      <view class="stat-value">{{myRecords}}</view>
+      <view class="stat-label">我的打卡</view>
+    </view>
+    <view class="stat-item">
+      <view class="stat-value">{{participantCount}}</view>
+      <view class="stat-label">参与人数</view>
+    </view>
+  </view>
+
+  <!-- 切换筛选 -->
+  <view class="filter-tabs">
+    <view 
+      class="tab-item {{currentTab === 'all' ? 'active' : ''}}" 
+      bindtap="switchTab" 
+      data-tab="all"
+    >全部打卡</view>
+    <view 
+      class="tab-item {{currentTab === 'my' ? 'active' : ''}}" 
+      bindtap="switchTab" 
+      data-tab="my"
+    >我的打卡</view>
+  </view>
+
+  <!-- 加载状态 -->
+  <view class="loading-container" wx:if="{{loading}}">
+    <view class="loading"></view>
+  </view>
+
+  <!-- 打卡记录列表 -->
+  <view class="records-list" wx:if="{{filteredRecords.length > 0}}">
+    <view class="record-item" wx:for="{{filteredRecords}}" wx:key="id">
+      <view class="record-header">
+        <view class="user-info">
+          <image class="user-avatar" src="{{item.user.avatarUrl || '/static/images/default-avatar.png'}}" mode="aspectFill"></image>
+          <view>
+            <view class="user-name">{{item.user.nickname}}</view>
+            <view class="record-time">{{item.createTime}}</view>
+          </view>
+        </view>
+        <view class="day-badge">第{{getDayNumber(item.createTime)}}天</view>
+      </view>
+      
+      <view class="record-content" wx:if="{{item.content}}">{{item.content}}</view>
+      
+      <view class="image-gallery" wx:if="{{item.images && item.images.length > 0}}">
+        <view class="gallery-grid" style="grid-template-columns: repeat({{item.images.length >= 3 ? 3 : item.images.length}}, 1fr);">
+          <image 
+            wx:for="{{item.images}}" 
+            wx:for-item="img" 
+            wx:for-index="imgIndex" 
+            wx:key="imgIndex"
+            src="{{img}}" 
+            mode="aspectFill" 
+            class="gallery-image"
+            data-src="{{img}}"
+            data-urls="{{item.images}}"
+            bindtap="previewImage"
+          ></image>
+        </view>
+      </view>
+      
+      <view class="audio-player" wx:if="{{item.audioPath}}">
+        <view class="audio-play {{item.isPlaying ? 'playing' : ''}}" bindtap="playAudio" data-audio-path="{{item.audioPath}}" data-index="{{index}}">
+          <view class="audio-icon">{{item.isPlaying ? '❚❚' : '▶'}}</view>
+          <view class="audio-bars" wx:if="{{item.isPlaying}}">
+            <view class="bar"></view>
+            <view class="bar"></view>
+            <view class="bar"></view>
+          </view>
+          <view class="audio-desc" wx:else>语音内容</view>
+        </view>
+      </view>
+      
+      <view class="video-container" wx:if="{{item.videoPath}}">
+        <video class="record-video" src="{{item.videoPath}}"></video>
+      </view>
+      
+      <view class="record-footer">
+        <view class="record-action like {{item.isLiked ? 'liked' : ''}}" bindtap="likeRecord" data-id="{{item.id}}">
+          <text class="action-icon">👍</text>
+          <text class="action-count">{{item.likes || 0}}</text>
+        </view>
+        <view class="record-action comment" bindtap="showComments" data-id="{{item.id}}">
+          <text class="action-icon">💬</text>
+          <text class="action-count">{{item.comments.length || 0}}</text>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 无记录提示 -->
+  <view class="empty-records" wx:if="{{!loading && filteredRecords.length === 0}}">
+    <image src="/static/images/empty-box.png" mode="aspectFit"></image>
+    <text>{{currentTab === 'all' ? '暂无打卡记录' : '您还没有打卡'}}</text>
+    <block wx:if="{{currentTab === 'my' && activity.hasJoined}}">
+      <button class="checkin-btn" bindtap="goToCheckIn">立即打卡</button>
+    </block>
+  </view>
+
+  <!-- 底部区域 -->
+  <view class="bottom-area" wx:if="{{activity.hasJoined && filteredRecords.length > 0}}">
+    <button class="checkin-btn" bindtap="goToCheckIn">打卡</button>
+  </view>
+</view> 

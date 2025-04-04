@@ -1,0 +1,197 @@
+/**
+ * 全局样式定义
+ */
+
+/* 颜色变量定义 - 基于color-theme.json */
+page {
+  /* 主色系 - Primary */
+  --primary-50: #f5f8ff;
+  --primary-100: #d7e3fe;
+  --primary-200: #b6cbfb;
+  --primary-300: #86a8f9;
+  --primary-400: #3872fa;
+  --primary-500: #004cff;
+  --primary-600: #003dcc;
+  --primary-700: #0035b3;
+  --primary-800: #002b8f;
+  --primary-900: #001e66;
+
+  /* 辅助色系 - Secondary */
+  --secondary-50: #ffffff;
+  --secondary-100: #ffffff;
+  --secondary-200: #ebf6e9;
+  --secondary-300: #c8e8c4;
+  --secondary-400: #92d789;
+  --secondary-500: #6bcf5e;
+  --secondary-600: #44c733;
+  --secondary-700: #39b828;
+  --secondary-800: #2ca01d;
+  --secondary-900: #237d17;
+
+  /* 中性色系 - Neutral */
+  --neutral-50: #ffffff;
+  --neutral-100: #ffffff;
+  --neutral-200: #ffffff;
+  --neutral-300: #ffffff;
+  --neutral-400: #f3f2f2;
+  --neutral-500: #ddd6d5;
+  --neutral-600: #c9b8b6;
+  --neutral-700: #c2a7a3;
+  --neutral-800: #b98f89;
+  --neutral-900: #aa776f;
+
+  /* 排版设置 */
+  --heading-font: 'Noto Sans SC';
+  --body-font: 'PingFang SC', 'Microsoft YaHei', sans-serif;
+  --base-font-size: 17px;
+  --line-height: 1.4;
+  --heading-scale: 1.28;
+  --heading-weight: bold;
+
+  /* UI设置 */
+  --border-radius: 11px;
+  --shadow-level: 0;
+  --spacing-scale: 0.85;
+  --button-style: 1;
+  --animation-level: 1;
+
+  /* 通用样式变量 */
+  --text-color: #333333;
+  --background-color: #ffffff;
+  --card-background: #ffffff;
+  --border-color: var(--neutral-500);
+}
+
+/* 支持深色模式 */
+@media (prefers-color-scheme: dark) {
+  page {
+    --text-color: #f3f2f2;
+    --background-color: #111111;
+    --card-background: #222222;
+    --border-color: #333333;
+  }
+}
+
+/* 基础样式重置 */
+page {
+  font-family: var(--body-font);
+  font-size: var(--base-font-size);
+  line-height: var(--line-height);
+  color: var(--text-color);
+  background-color: var(--background-color);
+  box-sizing: border-box;
+}
+
+view, text, button, input, textarea {
+  box-sizing: border-box;
+}
+
+/* 通用样式类 */
+.container {
+  padding: 30rpx;
+}
+
+.card {
+  background-color: var(--card-background);
+  border-radius: var(--border-radius);
+  padding: 20rpx;
+  margin-bottom: 20rpx;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.primary-btn {
+  background-color: var(--primary-500);
+  color: white;
+  border-radius: var(--border-radius);
+  padding: 20rpx 30rpx;
+  font-weight: bold;
+  border: none;
+}
+
+.secondary-btn {
+  background-color: var(--secondary-500);
+  color: white;
+  border-radius: var(--border-radius);
+  padding: 20rpx 30rpx;
+  font-weight: bold;
+  border: none;
+}
+
+.text-btn {
+  background: transparent;
+  color: var(--primary-500);
+  padding: 20rpx 30rpx;
+  font-weight: bold;
+  border: none;
+}
+
+/* 标题样式 */
+.h1, .h2, .h3, .h4, .h5 {
+  font-family: var(--heading-font);
+  font-weight: var(--heading-weight);
+}
+
+.h1 {
+  font-size: calc(var(--base-font-size) * var(--heading-scale) * var(--heading-scale) * var(--heading-scale));
+  margin-bottom: 30rpx;
+}
+
+.h2 {
+  font-size: calc(var(--base-font-size) * var(--heading-scale) * var(--heading-scale));
+  margin-bottom: 24rpx;
+}
+
+.h3 {
+  font-size: calc(var(--base-font-size) * var(--heading-scale));
+  margin-bottom: 20rpx;
+}
+
+.h4 {
+  font-size: var(--base-font-size);
+  margin-bottom: 16rpx;
+}
+
+.h5 {
+  font-size: calc(var(--base-font-size) / var(--heading-scale));
+  margin-bottom: 12rpx;
+}
+
+/* 文本样式 */
+.text-primary {
+  color: var(--primary-500);
+}
+
+.text-secondary {
+  color: var(--secondary-500);
+}
+
+.text-light {
+  color: var(--neutral-600);
+}
+
+/* 边距和布局 */
+.mt-1 { margin-top: 10rpx; }
+.mt-2 { margin-top: 20rpx; }
+.mt-3 { margin-top: 30rpx; }
+.mb-1 { margin-bottom: 10rpx; }
+.mb-2 { margin-bottom: 20rpx; }
+.mb-3 { margin-bottom: 30rpx; }
+.ml-1 { margin-left: 10rpx; }
+.ml-2 { margin-left: 20rpx; }
+.ml-3 { margin-left: 30rpx; }
+.mr-1 { margin-right: 10rpx; }
+.mr-2 { margin-right: 20rpx; }
+.mr-3 { margin-right: 30rpx; }
+
+.p-1 { padding: 10rpx; }
+.p-2 { padding: 20rpx; }
+.p-3 { padding: 30rpx; }
+
+.flex { display: flex; }
+.flex-row { flex-direction: row; }
+.flex-col { flex-direction: column; }
+.items-center { align-items: center; }
+.justify-center { justify-content: center; }
+.justify-between { justify-content: space-between; }
+.flex-wrap { flex-wrap: wrap; }
+.flex-1 { flex: 1; } 

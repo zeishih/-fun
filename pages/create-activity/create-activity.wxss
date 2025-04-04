@@ -1,0 +1,332 @@
+/* pages/create-activity/create-activity.wxss */
+.container {
+  padding: 30rpx;
+}
+
+/* 表单区块 */
+.form-section {
+  background-color: var(--card-background);
+  border-radius: var(--border-radius);
+  padding: 30rpx;
+  margin-bottom: 30rpx;
+  box-shadow: 0 2rpx 8rpx rgba(0, 0, 0, 0.05);
+}
+
+.section-title {
+  font-size: 32rpx;
+  font-weight: bold;
+  color: var(--text-color);
+  margin-bottom: 30rpx;
+  position: relative;
+  padding-left: 20rpx;
+}
+
+.section-title::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 8rpx;
+  width: 8rpx;
+  height: 28rpx;
+  background-color: var(--primary-500);
+  border-radius: 4rpx;
+}
+
+/* 表单项 */
+.form-item {
+  margin-bottom: 30rpx;
+}
+
+.form-label {
+  display: block;
+  font-size: 28rpx;
+  color: var(--text-color);
+  margin-bottom: 15rpx;
+}
+
+.required::before {
+  content: '*';
+  color: #ff4d4f;
+  margin-right: 6rpx;
+}
+
+.form-input {
+  width: 100%;
+  height: 80rpx;
+  background-color: var(--neutral-200);
+  border-radius: 8rpx;
+  padding: 0 20rpx;
+  font-size: 28rpx;
+  color: var(--text-color);
+}
+
+.form-textarea {
+  width: 100%;
+  height: 200rpx;
+  background-color: var(--neutral-200);
+  border-radius: 8rpx;
+  padding: 20rpx;
+  font-size: 28rpx;
+  color: var(--text-color);
+}
+
+.word-count {
+  text-align: right;
+  font-size: 24rpx;
+  color: var(--neutral-700);
+  margin-top: 10rpx;
+}
+
+/* 图书选择 */
+.book-selector {
+  background-color: var(--neutral-200);
+  border-radius: 8rpx;
+  overflow: hidden;
+}
+
+.empty-book {
+  height: 160rpx;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  color: var(--neutral-700);
+  font-size: 28rpx;
+}
+
+.add-icon {
+  width: 48rpx;
+  height: 48rpx;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23666666'%3E%3Cpath d='M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z'/%3E%3C/svg%3E");
+  background-size: contain;
+  background-repeat: no-repeat;
+  margin-bottom: 10rpx;
+}
+
+.selected-book {
+  display: flex;
+  padding: 20rpx;
+}
+
+.book-cover {
+  width: 120rpx;
+  height: 160rpx;
+  border-radius: 8rpx;
+  margin-right: 20rpx;
+  box-shadow: 0 4rpx 8rpx rgba(0, 0, 0, 0.1);
+}
+
+.book-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.book-title {
+  font-size: 30rpx;
+  font-weight: bold;
+  color: var(--text-color);
+  margin-bottom: 10rpx;
+}
+
+.book-author {
+  font-size: 26rpx;
+  color: var(--neutral-800);
+}
+
+.change-book {
+  font-size: 26rpx;
+  color: var(--primary-500);
+  padding: 20rpx;
+}
+
+/* 日期选择 */
+.date-picker, .time-picker {
+  display: flex;
+  align-items: center;
+}
+
+.date-value, .time-value, .picker-value {
+  flex: 1;
+  height: 80rpx;
+  line-height: 80rpx;
+  background-color: var(--neutral-200);
+  border-radius: 8rpx;
+  padding: 0 20rpx;
+  font-size: 28rpx;
+  color: var(--text-color);
+}
+
+.date-separator, .time-separator {
+  padding: 0 20rpx;
+  color: var(--neutral-800);
+}
+
+/* 单选组 */
+.radio-group {
+  display: flex;
+  flex-direction: column;
+}
+
+.radio-item {
+  display: flex;
+  align-items: center;
+  margin-bottom: 20rpx;
+  font-size: 28rpx;
+  color: var(--text-color);
+}
+
+.radio-item:last-child {
+  margin-bottom: 0;
+}
+
+/* 规则列表 */
+.rule-list {
+  margin-top: 20rpx;
+}
+
+.rule-item {
+  display: flex;
+  align-items: center;
+  margin-bottom: 20rpx;
+}
+
+.rule-content {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  background-color: var(--neutral-200);
+  border-radius: 8rpx;
+  padding: 0 20rpx;
+}
+
+.rule-number {
+  font-size: 28rpx;
+  color: var(--primary-500);
+  margin-right: 10rpx;
+  font-weight: bold;
+}
+
+.rule-input {
+  flex: 1;
+  height: 80rpx;
+  font-size: 28rpx;
+  color: var(--text-color);
+}
+
+.delete-rule {
+  width: 80rpx;
+  height: 80rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.delete-icon {
+  width: 36rpx;
+  height: 36rpx;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23ff4d4f'%3E%3Cpath d='M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z'/%3E%3C/svg%3E");
+  background-size: contain;
+  background-repeat: no-repeat;
+}
+
+.add-rule {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 80rpx;
+  background-color: var(--neutral-200);
+  border-radius: 8rpx;
+  font-size: 28rpx;
+  color: var(--primary-500);
+}
+
+/* 复选框组 */
+.checkbox-group {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20rpx;
+}
+
+.checkbox-item {
+  display: flex;
+  align-items: center;
+  font-size: 28rpx;
+  color: var(--text-color);
+}
+
+/* 协议 */
+.agreement {
+  padding: 30rpx 0;
+}
+
+.checkbox-agreement {
+  display: flex;
+  align-items: center;
+  font-size: 26rpx;
+  color: var(--neutral-800);
+}
+
+.agreement-link {
+  color: var(--primary-500);
+}
+
+/* 提交按钮 */
+.submit-btn {
+  width: 100%;
+  height: 90rpx;
+  line-height: 90rpx;
+  background-color: var(--primary-500);
+  color: white;
+  font-size: 32rpx;
+  border-radius: 45rpx;
+  margin-bottom: 50rpx;
+}
+
+.submit-btn.disabled {
+  background-color: var(--neutral-500);
+  color: var(--neutral-300);
+}
+
+/* 打卡内容类型 */
+.content-types {
+  background-color: #f8f9fa;
+  padding: 20rpx;
+  border-radius: 8rpx;
+}
+
+.content-type-info {
+  font-size: 26rpx;
+  color: #666;
+  margin-bottom: 20rpx;
+}
+
+.content-type-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20rpx;
+  margin-bottom: 20rpx;
+}
+
+.content-type-tag {
+  padding: 10rpx 24rpx;
+  border-radius: 30rpx;
+  font-size: 28rpx;
+  background-color: #e6f7ff;
+  color: #0078d7;
+  display: flex;
+  align-items: center;
+}
+
+.content-type-tag.active::before {
+  content: "✓";
+  margin-right: 6rpx;
+  font-weight: bold;
+}
+
+.content-type-desc {
+  font-size: 24rpx;
+  color: #999;
+  line-height: 1.5;
+} 
