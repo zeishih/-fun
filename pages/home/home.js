@@ -69,46 +69,46 @@ Page({
   /**
    * 加载活动列表
    */
-  loadActivities: function() {
-    try {
-      // 从本地存储获取活动列表
-      let activities = wx.getStorageSync('activities') || [];
-      
-      // 如果没有活动，添加默认的小王子活动
-      if (activities.length === 0) {
-        activities.push(this.getDefaultActivity());
-        wx.setStorageSync('activities', activities);
-      }
-      
-      // 计算每个活动的当前状态
-      activities = activities.map(activity => {
-        // 复制活动对象以避免修改原始对象
-        const updatedActivity = {...activity};
-        
-        // 计算活动状态
-        updatedActivity.status = this.calculateActivityStatus(updatedActivity.startDate, updatedActivity.endDate);
-        
-        return updatedActivity;
-      });
-      
-      // 更新热门活动列表
-      const hotActivities = activities.map(activity => {
-        return {
-          id: activity.id,
-          title: activity.title,
-          participants: activity.currentParticipants,
-          status: activity.status
-        };
-      });
+ // 修改loadActivities函数
+loadActivities: function() {
+  try {
+    this.setData({ loading: true });
+    
+    // 获取所有活动
+    const allActivities = wx.getStorageSync('activities') || [];
+    console.log('所有活动数量:', allActivities.length);
+    
+    // 只显示已审核通过的活动
+    const approvedActivities = allActivities.filter(activity => {
+      // 只有approvalStatus为approved的活动才显示
+      return activity.approvalStatus === 'approved';
+    });
+    
+    console.log('审核通过活动数量:', approvedActivities.length);
+    
+    // 更新页面数据
+    this.setData({
+      activities: approvedActivities,
+      loading: false
+    });
+    
+    // 提取热门活动
+    if (approvedActivities.length > 0) {
+      // 按参与人数排序
+      const sortedByParticipants = [...approvedActivities].sort((a, b) => 
+        (b.currentParticipants || 0) - (a.currentParticipants || 0)
+      );
       
       this.setData({
-        activities: activities,
-        hotActivities: hotActivities
+        dailyRecommend: sortedByParticipants[0],
+        hotActivities: sortedByParticipants.slice(0, 3)
       });
-    } catch (e) {
-      console.error('获取活动列表失败', e);
     }
-  },
+  } catch (e) {
+    console.error('加载活动失败:', e);
+    this.setData({ loading: false });
+  }
+},
   
   /**
    * 计算活动状态
@@ -273,6 +273,7 @@ Page({
   
   /**
    * 跳转到活动详情页
+   * @param {Object} e - 事件对象
    */
   goToActivityDetail: function(e) {
     const id = e.currentTarget.dataset.id;

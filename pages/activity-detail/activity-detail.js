@@ -48,27 +48,27 @@ Page({
       title: '加载中...'
     });
 
-    // 获取当前用户信息（模拟）
-    const currentUser = {
-      id: 'user_001',
-      nickname: '阅读者小明',
-      avatarUrl: '/static/images/default-avatar.png'
-    };
-
-    // 从本地存储获取活动数据
     try {
-      // 获取所有活动
+      // 获取当前用户信息
+      const currentUser = this.getCurrentUser() || {
+        userId: 'user_default',
+        nickname: '游客',
+        avatarUrl: '/static/images/default-avatar.png'
+      };
+
+      // 从本地存储获取活动数据
       const activities = wx.getStorageSync('activities') || [];
       
-      // 查找当前ID的活动
-      let activityData = activities.find(activity => activity.id === this.data.activityId);
+      console.log('查找活动ID:', this.data.activityId);
+      console.log('所有活动:', activities.map(a => ({id: a.id, activityId: a.activityId, title: a.title})));
       
-      // 如果没找到活动数据，使用默认小王子活动（兼容之前的测试）
-      if (!activityData && this.data.activityId === 'activity_test_001') {
-        activityData = this.getDefaultActivity();
-      }
+      // 同时检查activityId和id字段
+      const activityData = activities.find(activity => 
+        activity.activityId === this.data.activityId || 
+        activity.id === this.data.activityId
+      );
       
-      // 如果还是没有活动数据，显示错误提示
+      // 如果没找到活动数据，显示错误提示
       if (!activityData) {
         wx.hideLoading();
         wx.showToast({
@@ -81,20 +81,47 @@ Page({
         return;
       }
       
+      // 确保活动有一致的ID
+      if (!activityData.activityId) {
+        activityData.activityId = activityData.id;
+      }
+      if (!activityData.id) {
+        activityData.id = activityData.activityId;
+      }
+      
       // 计算活动当前状态
       activityData.status = this.calculateActivityStatus(activityData.startDate, activityData.endDate);
       
       // 判断是否为创建者
-      const isCreator = currentUser.id === activityData.creator.id;
+      const isCreator = activityData.creator && 
+                        currentUser && 
+                        activityData.creator.userId === currentUser.userId;
 
       // 判断是否已参与
-      const hasJoined = activityData.participants && activityData.participants.some(p => p.id === currentUser.id);
+      const hasJoined = activityData.participants && 
+                        currentUser && 
+                        activityData.participants.some(p => p.userId === currentUser.userId);
+
+      console.log('活动详情:', {
+        activityId: activityData.activityId,
+        title: activityData.title,
+        status: activityData.status,
+        approvalStatus: activityData.approvalStatus,
+        isCreator: isCreator
+      });
 
       this.setData({
         activity: activityData,
         isCreator: isCreator,
         hasJoined: hasJoined,
-        loading: false
+        loading: false,
+        btnText: hasJoined ? '退出活动' : '加入活动',
+        isParticipant: hasJoined
+      });
+
+      // 更新页面标题
+      wx.setNavigationBarTitle({
+        title: activityData.title || '活动详情'
       });
 
       wx.hideLoading();
@@ -271,9 +298,12 @@ Page({
    * 查看所有打卡记录
    */
   viewAllRecords: function () {
+    // 确保使用正确的活动ID
+    const correctActivityId = this.data.activity.activityId || this.data.activity.id;
+    
     // 跳转到打卡记录列表页面
     wx.navigateTo({
-      url: `/pages/check-in-records/check-in-records?activityId=${this.data.activityId}`
+      url: `/pages/check-in-records/check-in-records?activityId=${correctActivityId}`
     });
   },
 
@@ -436,8 +466,11 @@ Page({
    * 前往打卡页面
    */
   goToCheckIn: function() {
+    // 确保使用正确的活动ID
+    const correctActivityId = this.data.activity.activityId || this.data.activity.id;
+    
     wx.navigateTo({
-      url: `/pages/check-in/check-in?id=${this.data.activityId}`
+      url: `/pages/check-in/check-in?id=${correctActivityId}`
     });
   },
 

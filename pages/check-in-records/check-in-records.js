@@ -100,7 +100,14 @@ Page({
     try {
       // 从本地存储获取活动数据
       const activities = wx.getStorageSync('activities') || [];
-      const activity = activities.find(a => a.id === this.data.activityId);
+      console.log('查找活动ID:', this.data.activityId);
+      console.log('所有活动:', activities.map(a => ({id: a.id, activityId: a.activityId, title: a.title})));
+      
+      // 同时检查id和activityId字段
+      const activity = activities.find(a => 
+        a.activityId === this.data.activityId || 
+        a.id === this.data.activityId
+      );
       
       if (!activity) {
         wx.hideLoading();
@@ -114,28 +121,68 @@ Page({
         return;
       }
       
+      console.log('找到活动数据:', activity);
+      
+      // 确保当前用户信息
+      const userInfo = getApp().globalData.userInfo || this.data.currentUser;
+      const currentUser = {
+        id: userInfo.userId,
+        userId: userInfo.userId,
+        nickname: userInfo.nickName,
+        avatarUrl: userInfo.avatarUrl
+      };
+      
       // 检查当前用户是否已加入活动
-      const hasJoined = activity.participants && activity.participants.some(p => p.id === this.data.currentUser.id);
+      const hasJoined = activity.participants && 
+                       activity.participants.some(p => 
+                          (p.userId === currentUser.userId) || 
+                          (p.id === currentUser.id)
+                        );
       
       // 获取所有打卡记录并处理
       console.log('所有打卡记录:', activity.checkInRecords);
       
       const recordsWithLikes = (activity.checkInRecords || []).map(record => {
+        // 处理不同结构的记录，确保兼容性
+        const userId = record.userId || (record.user ? record.user.userId || record.user.id : null);
+        const userName = record.userName || (record.user ? record.user.nickName || record.user.nickname : '未知用户');
+        const userAvatar = record.userAvatar || (record.user ? record.user.avatarUrl : '/static/images/default-avatar.png');
+        
+        // 统一用户信息
+        const user = {
+          id: userId,
+          userId: userId,
+          nickname: userName,
+          avatarUrl: userAvatar
+        };
+        
         // 增加是否被当前用户点赞的标记
-        const isLiked = record.likedBy ? record.likedBy.includes(this.data.currentUser.id) : false;
+        const isLiked = record.likedBy ? 
+                      record.likedBy.includes(currentUser.userId) || 
+                      record.likedBy.includes(currentUser.id) : 
+                      false;
+        
         // 处理点赞数量
-        const likes = record.likedBy ? record.likedBy.length : 0;
+        const likes = record.likedBy ? record.likedBy.length : (record.likes || 0);
+        
+        // 处理图片
+        const images = record.images || [];
         
         return {
           ...record,
+          user: user,
           isLiked: isLiked,
           likes: likes,
+          images: images,
           isPlaying: false
         };
       });
       
       // 我的打卡记录数量
-      const myRecordsCount = recordsWithLikes.filter(record => record.user.id === this.data.currentUser.id).length;
+      const myRecordsCount = recordsWithLikes.filter(record => 
+        (record.user.id === currentUser.id) || 
+        (record.user.userId === currentUser.userId)
+      ).length;
       
       // 参与人数
       const participantCount = activity.participants ? activity.participants.length : 0;
@@ -145,6 +192,7 @@ Page({
           ...activity,
           hasJoined: hasJoined
         },
+        currentUser: currentUser,
         allRecords: recordsWithLikes,
         totalRecords: recordsWithLikes.length,
         myRecords: myRecordsCount,
@@ -178,11 +226,16 @@ Page({
     if (tabType === 'all') {
       filteredRecords = allRecords;
     } else if (tabType === 'my') {
-      filteredRecords = allRecords.filter(record => record.user.id === currentUser.id);
+      filteredRecords = allRecords.filter(record => 
+        (record.user && record.user.id === currentUser.id) || 
+        (record.user && record.user.userId === currentUser.userId) ||
+        (record.userId === currentUser.userId)
+      );
     }
     
     this.setData({
-      filteredRecords: filteredRecords
+      filteredRecords: filteredRecords,
+      currentTab: tabType
     });
   },
 
@@ -308,7 +361,12 @@ Page({
     // 获取所有活动
     try {
       const activities = wx.getStorageSync('activities') || [];
-      const activityIndex = activities.findIndex(a => a.id === this.data.activityId);
+      
+      // 同时检查id和activityId
+      const activityIndex = activities.findIndex(a => 
+        a.activityId === this.data.activityId || 
+        a.id === this.data.activityId
+      );
       
       if (activityIndex === -1) {
         wx.showToast({
@@ -320,6 +378,11 @@ Page({
       
       // 复制当前活动数据
       const activity = {...activities[activityIndex]};
+      
+      // 确保有checkInRecords数组
+      if (!activity.checkInRecords) {
+        activity.checkInRecords = [];
+      }
       
       // 查找打卡记录
       const recordIndex = activity.checkInRecords.findIndex(r => r.id === recordId);
@@ -341,7 +404,7 @@ Page({
       }
       
       // 当前用户ID
-      const userId = this.data.currentUser.id;
+      const userId = this.data.currentUser.userId || this.data.currentUser.id;
       
       // 判断是否已点赞
       const likedIndex = record.likedBy.indexOf(userId);

@@ -425,6 +425,7 @@ Page({
         contentTypes: formData.checkInContent
       },
       status: 'recruiting', // 初始状态为招募中
+      approvalStatus: 'pending', // 添加审核状态
       coverUrl: formData.book ? formData.book.coverUrl : this.data.defaultCover,
       createTime: new Date().toISOString(),
       checkInRecords: [],
@@ -442,6 +443,8 @@ Page({
     submitData.creator = creator;
     // 创建者自动成为参与者
     submitData.participants.push(creator);
+    console.log('创建活动数据:', submitData);
+    console.log('审核状态:', submitData.approvalStatus);
     
     // 保存活动数据
     try {
@@ -459,7 +462,7 @@ Page({
       // 显示成功提示
       wx.showModal({
         title: '创建成功',
-        content: '活动已创建成功！',
+        content: '活动已创建成功！需等待管理员审核通过后才会显示在首页。',
         confirmText: '立即查看',
         cancelText: '返回首页',
         success: (res) => {

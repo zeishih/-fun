@@ -89,10 +89,17 @@ Page({
   loadActivityDetail: function () {
     try {
       const activities = wx.getStorageSync('activities') || [];
-      const activity = activities.find(item => item.id === this.data.activityId);
+      console.log('查找活动ID:', this.data.activityId);
+      console.log('所有活动:', activities.map(a => ({id: a.id, activityId: a.activityId, title: a.title})));
+      
+      // 同时检查id和activityId字段
+      const activity = activities.find(item => 
+        item.activityId === this.data.activityId || 
+        item.id === this.data.activityId
+      );
 
       // 输出完整活动数据，用于调试
-      console.log('完整活动数据：', activity);
+      console.log('找到活动数据：', activity);
 
       if (!activity) {
         this.setData({ loading: false });
@@ -108,7 +115,9 @@ Page({
 
       // 确保 checkInContent 字段是数组
       let allowedContentTypes = [];
-      if (activity.checkInContent) {
+      if (activity.checkInRequirements && activity.checkInRequirements.contentTypes) {
+        allowedContentTypes = activity.checkInRequirements.contentTypes;
+      } else if (activity.checkInContent) {
         if (Array.isArray(activity.checkInContent)) {
           allowedContentTypes = activity.checkInContent;
         } else if (typeof activity.checkInContent === 'string') {
@@ -134,11 +143,11 @@ Page({
 
       // 准备调试信息
       const debugInfo = {
-        activityId: activity.id,
-        rawCheckInContent: activity.checkInContent,
+        activityId: activity.activityId || activity.id,
+        rawCheckInContent: activity.checkInContent || (activity.checkInRequirements ? activity.checkInRequirements.contentTypes : []),
         parsedAllowedTypes: allowedContentTypes,
         activityType: activity.activityType,
-        checkInRequirement: activity.checkInRequirement
+        checkInRequirement: activity.checkInRequirement || (activity.checkInRequirements ? activity.checkInRequirements.frequency : 'flexible')
       };
 
       this.setData({
@@ -462,8 +471,10 @@ Page({
       const activities = wx.getStorageSync('activities') || [];
       console.log('获取到活动数量:', activities.length);
       
-      // 找到当前活动的索引
-      const activityIndex = activities.findIndex(a => a.id === activityId);
+      // 找到当前活动的索引 - 同时检查id和activityId字段
+      const activityIndex = activities.findIndex(a => 
+        a.activityId === activityId || a.id === activityId
+      );
       console.log('当前活动索引:', activityIndex);
       
       if (activityIndex !== -1) {
@@ -514,107 +525,27 @@ Page({
             setTimeout(() => {
               this.submitInProgress = false;
               
-              // 直接返回上一页并触发刷新
-              const pages = getCurrentPages();
-              // 查找目标页面索引：活动详情或打卡记录页
-              let targetPageIndex = -1;
+              // 获取正确的活动ID用于跳转
+              const correctActivityId = updatedActivity.activityId || updatedActivity.id;
               
-              for (let i = pages.length - 2; i >= 0; i--) {
-                const page = pages[i];
-                if (page.route.includes('activity-detail') || page.route.includes('check-in-records')) {
-                  targetPageIndex = i;
-                  break;
-                }
-              }
-              
-              const delta = pages.length - 1 - targetPageIndex;
-              
-              if (targetPageIndex !== -1) {
-                // 返回到目标页面
-                wx.navigateBack({
-                  delta: delta,
-                  success: () => {
-                    console.log('成功返回目标页面');
-                    
-                    // 如果目标页面存在，手动调用其刷新方法
-                    const targetPage = pages[targetPageIndex];
-                    if (targetPage) {
-                      // 延迟调用页面的刷新方法，确保页面已完全显示
-                      setTimeout(() => {
-                        if (targetPage.route.includes('activity-detail')) {
-                          targetPage.loadActivityDetail();
-                        } else if (targetPage.route.includes('check-in-records')) {
-                          targetPage.loadActivityData();
-                        }
-                      }, 500);
-                    }
-                  },
-                  fail: (err) => {
-                    console.error('返回页面失败', err);
-                    // 如果返回失败，尝试重定向到活动详情页
-                    wx.redirectTo({
-                      url: `/pages/activity-detail/activity-detail?id=${activityId}`
-                    });
-                  }
-                });
-              } else {
-                // 如果找不到目标页面，直接重定向到活动详情页
-                wx.redirectTo({
-                  url: `/pages/activity-detail/activity-detail?id=${activityId}`
-                });
-              }
-            }, 1500);
-          }
-        });
-      } else {
-        // 活动不存在的情况下，创建一个新活动
-        console.log('未找到活动，创建测试活动');
-        
-        const testActivity = {
-          id: activityId,
-          title: "测试活动",
-          book: {
-            id: "test_book",
-            title: "测试图书",
-            author: "测试作者",
-            coverUrl: this.data.defaultCover
-          },
-          startDate: "2025-04-01",
-          endDate: "2025-05-01",
-          maxParticipants: 20,
-          currentParticipants: 1,
-          activityType: "public",
-          description: "这是一个测试活动",
-          checkInRequirement: "flexible",
-          checkInContent: ["text", "image"],
-          creator: userInfo,
-          participants: [userInfo],
-          checkInRecords: [checkInRecord]
-        };
-        
-        activities.push(testActivity);
-        wx.setStorageSync('activities', activities);
-        
-        console.log('创建测试活动并添加打卡记录成功');
-        
-        wx.hideLoading();
-        
-        // 显示成功提示
-        wx.showToast({
-          title: '打卡成功(测试)',
-          icon: 'success',
-          duration: 1500,
-          mask: true, // 防止用户触摸操作
-          success: () => {
-            // 延迟后跳转到活动详情页
-            setTimeout(() => {
-              this.submitInProgress = false;
               wx.redirectTo({
-                url: `/pages/activity-detail/activity-detail?id=${activityId}`
+                url: `/pages/activity-detail/activity-detail?id=${correctActivityId}`
               });
             }, 1500);
           }
         });
+      } else {
+        // 活动不存在的情况下，记录错误并返回
+        console.error('找不到活动:', activityId);
+        wx.hideLoading();
+        wx.showToast({
+          title: '活动不存在，无法打卡',
+          icon: 'none'
+        });
+        setTimeout(() => {
+          this.submitInProgress = false;
+          wx.navigateBack();
+        }, 1500);
       }
     } catch (err) {
       this.submitInProgress = false;

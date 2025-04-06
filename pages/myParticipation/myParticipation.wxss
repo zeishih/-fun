@@ -179,6 +179,32 @@
   color: #999;
 }
 
+/* 添加审核状态样式 */
+.approval-status {
+  font-size: 24rpx;
+  padding: 6rpx 16rpx;
+  border-radius: 20rpx;
+  width: fit-content;
+  display: inline-block;
+  margin-right: 10rpx;
+  margin-bottom: 10rpx;
+}
+
+.approval-status.pending {
+  background-color: #fff7e6;
+  color: #fa8c16;
+}
+
+.approval-status.approved {
+  background-color: #e6f7ff;
+  color: #1890ff;
+}
+
+.approval-status.rejected {
+  background-color: #fff1f0;
+  color: #f5222d;
+}
+
 /* 空状态提示 */
 .empty-tip {
   display: flex;

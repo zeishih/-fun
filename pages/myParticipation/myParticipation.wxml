@@ -60,6 +60,12 @@
               <view class="activity-book" wx:if="{{item.book}}">《{{item.book.title}}》</view>
               <view class="activity-dates">{{item.startDate}} 至 {{item.endDate}}</view>
               <view class="activity-participants">参与人数: {{item.currentParticipants || 0}}/{{item.maxParticipants || '不限'}}</view>
+              <view class="approval-status {{item.approvalStatus}}">
+                <text wx:if="{{item.approvalStatus === 'pending'}}">审核中</text>
+                <text wx:elif="{{item.approvalStatus === 'approved'}}">已通过审核</text>
+                <text wx:elif="{{item.approvalStatus === 'rejected'}}">未通过审核</text>
+                <text wx:else>审核中</text>
+              </view>
               <view class="activity-status {{item.status}}">
                 <text wx:if="{{item.status === 'recruiting'}}">招募中</text>
                 <text wx:elif="{{item.status === 'ongoing'}}">进行中</text>

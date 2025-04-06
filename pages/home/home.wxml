@@ -72,17 +72,17 @@
     <block wx:if="{{hotActivities.length > 0}}">
       <view 
         wx:for="{{hotActivities}}" 
-        wx:key="id" 
+        wx:key="activityId" 
         class="activity-item" 
         bindtap="goToActivityDetail" 
-        data-id="{{item.id}}"
+        data-id="{{item.activityId}}"
       >
-        <image class="activity-image" src="{{activities[index].coverUrl || '/static/images/activity-cover.png'}}" mode="aspectFill"></image>
+        <image class="activity-image" src="{{item.coverUrl || '/static/images/activity-cover.png'}}" mode="aspectFill"></image>
         <view class="activity-info">
           <view class="activity-title">{{item.title}}</view>
-          <view class="activity-desc">{{activities[index].description || '点击查看活动详情'}}</view>
+          <view class="activity-desc">{{item.description || '点击查看活动详情'}}</view>
           <view class="activity-meta">
-            <text class="activity-participants">{{item.participants}}人参与</text>
+            <text class="activity-participants">{{item.currentParticipants || 0}}人参与</text>
             <text class="activity-status {{item.status === 'recruiting' ? 'recruiting' : (item.status === 'ongoing' ? 'ongoing' : 'finished')}}">
               {{item.status === 'recruiting' ? '招募中' : (item.status === 'ongoing' ? '进行中' : '已结束')}}
             </text>
@@ -118,10 +118,10 @@
       <text class="module-more" bindtap="goToActivityList">查看全部</text>
     </view>
     <view class="hot-activities-list">
-      <view class="activity-item" wx:for="{{hotActivities}}" wx:key="id" bindtap="goToActivityDetail" data-id="{{item.id}}">
+      <view class="activity-item" wx:for="{{hotActivities}}" wx:key="activityId" bindtap="goToActivityDetail" data-id="{{item.activityId}}">
         <view class="activity-name">{{item.title}}</view>
         <view class="activity-info">
-          <view class="activity-participants">{{item.participants}}人参与</view>
+          <view class="activity-participants">{{item.currentParticipants || 0}}人参与</view>
           <view class="activity-tag {{item.status === 'recruiting' ? 'tag-recruiting' : (item.status === 'ongoing' ? 'tag-ongoing' : 'tag-finished')}}">
             {{item.status === 'recruiting' ? '招募中' : (item.status === 'ongoing' ? '进行中' : '已结束')}}
           </view>

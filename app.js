@@ -31,6 +31,9 @@ App({
     // 初始化应用数据
     this.initAppData();
     
+    // 检查并处理默认活动
+    this.fixDefaultActivity();
+    
     // 检查用户登录状态
     this.checkLoginStatus();
   },
@@ -224,6 +227,76 @@ App({
     }
     
     return isLoggedIn;
+  },
+  
+  /**
+   * 处理默认活动，确保小王子活动在首页显示
+   */
+  fixDefaultActivity: function() {
+    try {
+      const activities = wx.getStorageSync('activities') || [];
+      let defaultActivity = activities.find(a => a.title === '《小王子》共读计划');
+      
+      // 如果找到了默认活动
+      if (defaultActivity) {
+        // 确保默认活动已审核通过
+        if (!defaultActivity.approvalStatus || defaultActivity.approvalStatus !== 'approved') {
+          const index = activities.findIndex(a => a.title === '《小王子》共读计划');
+          if (index !== -1) {
+            activities[index].approvalStatus = 'approved';
+            wx.setStorageSync('activities', activities);
+            console.log('已将默认活动标记为已审核通过');
+          }
+        }
+      } else {
+        // 如果没有找到默认活动，创建一个
+        const defaultActivity = {
+          activityId: 'activity_test_001',
+          title: '《小王子》共读计划',
+          book: {
+            id: '1',
+            title: '小王子',
+            author: '安托万·德·圣-埃克苏佩里',
+            coverUrl: '/static/images/books/little-prince.png'
+          },
+          startDate: '2023-07-01',
+          endDate: '2023-07-30',
+          maxParticipants: 30,
+          currentParticipants: 12,
+          type: 'public',
+          description: '《小王子》是一本充满哲理的童话故事，我们将在30天内完成阅读，每天交流读后感受，一起体会这个温暖人心的故事。',
+          rules: [
+            '每天阅读指定页数或章节',
+            '按时完成打卡',
+            '积极参与讨论，分享读后感想',
+            '尊重其他参与者的观点和感受'
+          ],
+          status: 'ongoing',
+          approvalStatus: 'approved', // 确保已审核通过
+          coverUrl: '/static/images/books/little-prince.png',
+          createTime: '2023-06-25T14:30:00.000Z',
+          checkInRecords: [],
+          participants: [
+            {
+              userId: 'user_default',
+              nickName: '系统管理员',
+              avatarUrl: '/static/images/default-avatar.png'
+            }
+          ],
+          creator: {
+            userId: 'user_default',
+            nickName: '系统管理员',
+            avatarUrl: '/static/images/default-avatar.png'
+          }
+        };
+        
+        activities.push(defaultActivity);
+        wx.setStorageSync('activities', activities);
+        console.log('已创建默认活动');
+      }
+    } catch (e) {
+      console.error('处理默认活动时出错', e);
+    }
   },
   
   globalData: {
