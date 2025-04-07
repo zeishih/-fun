@@ -1,0 +1,96 @@
+# 后端代码要求：阅读越有fun (第一阶段 - 基础启动与登录)
+
+**目标：** 在 `reading-fun-backend` 项目中，使用 Node.js, Express, Mongoose, 和 dotenv 搭建基础后端服务，并实现微信小程序用户登录功能。
+
+**技术栈:**
+*   Node.js
+*   Express.js (Web 框架)
+*   MongoDB (数据库)
+*   Mongoose (ODM - 操作 MongoDB)
+*   dotenv (环境变量管理)
+*   jsonwebtoken (用于生成和验证 JWT)
+*   nodemon (开发时自动重启)
+
+**项目结构 (建议):**
+*   `server.js` (或 `app.js`): 应用入口文件
+*   `config/`: 存放配置文件 (例如数据库连接)
+*   `routes/`: 定义 API 路由
+*   `controllers/`: 处理请求和业务逻辑
+*   `models/`: 定义 Mongoose 数据模型 (数据库结构)
+*   `middleware/`: 存放中间件 (例如身份验证)
+*   `.env`: 存储环境变量 (数据库连接字符串, JWT 密钥, 微信 AppID/AppSecret)
+*   `.gitignore`: 已配置，确保 `node_modules` 和 `.env` 被忽略
+
+**任务：**
+
+1.  **创建 `.env` 文件:**
+    *   在项目根目录创建 `.env` 文件。
+    *   添加以下占位环境变量 (请后续替换为真实值):
+        ```dotenv
+        PORT=3000
+        MONGODB_URI=mongodb://localhost:27017/reading_fun_dev
+        JWT_SECRET=YOUR_VERY_SECRET_KEY_REPLACE_THIS
+        WECHAT_APPID=YOUR_WECHAT_APPID
+        WECHAT_SECRET=YOUR_WECHAT_APPSECRET
+        ```
+    *   **确保 `.env` 已在 `.gitignore` 中。**
+
+2.  **设置数据库连接 (`config/db.js`):**
+    *   创建 `config/db.js` 文件。
+    *   使用 Mongoose 连接到 MongoDB。
+    *   从 `.env` 文件中读取 `MONGODB_URI`。
+    *   处理连接成功和失败的情况，并打印日志。
+
+3.  **创建用户模型 (`models/User.js`):**
+    *   创建 `models/User.js` 文件。
+    *   定义 User Schema，至少包含以下字段：
+        *   `openid`: String, required, unique (微信用户的唯一标识)
+        *   `nickname`: String (昵称)
+        *   `avatarUrl`: String (头像 URL)
+        *   `createdAt`: Date, default: Date.now
+        *   `updatedAt`: Date, default: Date.now
+    *   (可以根据需要添加 `session_key` 字段，但通常不直接存储或按原样存储，这里暂时省略)
+
+4.  **创建应用入口文件 (`server.js` 或 `app.js`):**
+    *   引入 `express`, `dotenv`, `mongoose`。
+    *   加载环境变量 (`dotenv.config()`)。
+    *   连接数据库 (调用 `config/db.js` 中的连接函数)。
+    *   使用 `express.json()` 中间件解析 JSON 请求体。
+    *   创建 Express 应用实例。
+    *   定义一个基础的根路由 `GET /`，返回简单消息 (例如: `{ message: "Welcome to Reading Fun Backend API" }`) 以确认服务器运行。
+    *   引入并使用认证相关的路由 (见下一步)。
+    *   添加一个全局错误处理中间件（可选，初期可以简单处理）。
+    *   从 `.env` 读取 `PORT`，启动服务器监听该端口。
+
+5.  **实现微信登录 API (`routes/auth.js`, `controllers/authController.js`):**
+    *   **路由 (`routes/auth.js`):**
+        *   定义 `POST /api/auth/login` 路由，指向登录处理函数。
+    *   **控制器 (`controllers/authController.js`):**
+        *   创建 `login` 函数 (async function)。
+        *   **接收请求:** 从请求体 (`req.body`) 中获取小程序通过 `wx.login()` 获取到的 `code`。进行基本校验（确保 code 存在）。
+        *   **请求微信 API:** 使用 `axios` 或 Node.js 内置的 `https` 模块，携带 `appid`, `secret`, `js_code` (就是前端传来的 code) 调用微信 `jscode2session` 接口 (URL: `https://api.weixin.qq.com/sns/jscode2session`)。从 `.env` 读取 `WECHAT_APPID` 和 `WECHAT_SECRET`。
+        *   **处理微信响应:** 获取响应中的 `openid` 和 `session_key`。注意处理微信可能返回的错误码。
+        *   **数据库操作:**
+            *   根据 `openid` 在数据库中查找用户 (`User.findOne({ openid })`)。
+            *   **如果用户不存在:** 创建新用户，保存 `openid` (可以暂时不保存昵称头像，后续让用户授权获取)。
+            *   **如果用户存在:** 可以更新用户信息（如果需要）。
+        *   **生成 JWT:** 使用 `jsonwebtoken` 库，根据用户的数据库 ID (`_id`) 或 `openid` 以及在 `.env` 中定义的 `JWT_SECRET` 生成一个 Token。设置一个合适的过期时间 (例如: '7d')。
+        *   **返回响应:** 向前端返回一个包含 `token` 和可能的 `userId` 或简单用户信息的 JSON 对象。**绝对不能返回 `session_key` 给前端！**
+        *   **错误处理:** 使用 `try...catch` 捕获过程中可能发生的错误（网络请求错误、数据库错误等），并返回适当的错误响应 (例如: 500 Internal Server Error)。
+
+6.  **配置 `package.json` 脚本:**
+    *   在 `package.json` 的 `scripts` 部分添加：
+        ```json
+        "scripts": {
+          "start": "node server.js", // 或者你的入口文件名
+          "dev": "nodemon server.js" // 或者你的入口文件名
+        }
+        ```
+
+7.  **安装额外依赖:**
+    *   安装 `jsonwebtoken` 和 `axios` (如果选择用 axios 请求微信 API)：
+        ```bash
+        npm install jsonwebtoken axios
+        ```
+
+**要求 Cursor 生成上述文件和代码结构。**
