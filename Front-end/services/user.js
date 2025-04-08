@@ -72,9 +72,11 @@ const userService = {
             message: '网络请求失败，请检查网络连接',
             error: err
           });
+        }
+      });
     });
   },
-  
+
   /**
    * 检查用户是否已登录
    * @returns {boolean} 登录状态
