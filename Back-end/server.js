@@ -6,6 +6,7 @@ const express = require('express');
 const dotenv = require('dotenv');
 const connectDB = require('./config/db');
 const errorHandler = require('./middleware/error');
+const requestLogger = require('./middleware/logger');
 
 // 加载环境变量
 dotenv.config();
@@ -15,6 +16,9 @@ connectDB();
 
 // 创建Express应用实例
 const app = express();
+
+// 请求日志中间件
+app.use(requestLogger);
 
 // 中间件
 app.use(express.json()); // 解析JSON请求体
@@ -38,6 +42,7 @@ app.get('/', (req, res) => {
 
 // 使用路由
 app.use('/api/auth', require('./routes/auth'));
+app.use('/api/users', require('./routes/user'));
 
 // 404处理
 app.use((req, res) => {

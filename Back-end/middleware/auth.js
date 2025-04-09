@@ -1,5 +1,5 @@
 /**
- * 身份验证中间件
+ * 认证中间件
  * @module middleware/auth
  */
 const jwt = require('jsonwebtoken');
@@ -29,7 +29,7 @@ exports.protect = async (req, res, next) => {
     if (!token) {
       return res.status(401).json({
         success: false,
-        message: '未授权访问，请先登录',
+        message: '未授权，没有提供Token',
       });
     }
 
@@ -37,26 +37,23 @@ exports.protect = async (req, res, next) => {
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
 
     // 检查用户是否存在
-    const user = await User.findById(decoded.id);
+    const user = await User.findById(decoded.id).select('-__v');
+    
     if (!user) {
       return res.status(401).json({
         success: false,
-        message: '令牌无效，未找到该用户',
+        message: '未授权，用户不存在',
       });
     }
 
     // 将用户信息添加到请求对象中
-    req.user = {
-      id: user._id,
-      openid: user.openid,
-    };
-
+    req.user = user;
     next();
   } catch (error) {
     console.error('认证中间件错误:', error);
     return res.status(401).json({
       success: false,
-      message: '未授权访问，令牌无效',
+      message: '未授权，Token无效',
     });
   }
 }; 
