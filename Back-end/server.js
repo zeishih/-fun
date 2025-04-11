@@ -43,6 +43,7 @@ app.get('/', (req, res) => {
 // 使用路由
 app.use('/api/auth', require('./routes/auth'));
 app.use('/api/users', require('./routes/user'));
+app.use('/api/books', require('./routes/books')); // 添加书籍路由
 
 // 404处理
 app.use((req, res) => {

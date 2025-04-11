@@ -313,4 +313,193 @@ exports.validateUserStatistics = (req, res, next) => {
   }
 
   next();
-}; 
+};
+
+/**
+ * 验证书籍数据
+ * @param {Object} req - Express请求对象
+ * @param {Object} res - Express响应对象
+ * @param {Function} next - Express下一个中间件函数
+ */
+exports.validateBook = (req, res, next) => {
+  const bookData = req.body;
+
+  // 验证标题
+  if (!bookData.title || typeof bookData.title !== 'string' || bookData.title.trim() === '') {
+    return res.status(400).json({
+      success: false,
+      message: '书籍标题不能为空',
+    });
+  }
+
+  // 验证作者
+  if (!bookData.author || typeof bookData.author !== 'string' || bookData.author.trim() === '') {
+    return res.status(400).json({
+      success: false,
+      message: '作者不能为空',
+    });
+  }
+
+  // 验证封面图片URL（如果提供）
+  if ((bookData.coverUrl !== undefined && typeof bookData.coverUrl !== 'string') ||
+      (bookData.coverImageUrl !== undefined && typeof bookData.coverImageUrl !== 'string')) {
+    return res.status(400).json({
+      success: false,
+      message: '封面图片URL必须是字符串',
+    });
+  }
+
+  // 验证描述（如果提供）
+  if ((bookData.description !== undefined && typeof bookData.description !== 'string') ||
+      (bookData.introduction !== undefined && typeof bookData.introduction !== 'string')) {
+    return res.status(400).json({
+      success: false,
+      message: '描述必须是字符串',
+    });
+  }
+
+  // 验证类型（如果提供）
+  if (bookData.genre !== undefined || bookData.tags !== undefined) {
+    const genreArray = bookData.genre || bookData.tags;
+    
+    if (!Array.isArray(genreArray)) {
+      return res.status(400).json({
+        success: false,
+        message: '类型必须是一个数组',
+      });
+    }
+
+    // 验证数组中的每个元素是否为字符串
+    for (const genre of genreArray) {
+      if (typeof genre !== 'string' || genre.trim() === '') {
+        return res.status(400).json({
+          success: false,
+          message: '类型数组中的每个元素都必须是非空字符串',
+        });
+      }
+    }
+  }
+
+  // 验证难度级别（如果提供）
+  if (bookData.difficultyLevel !== undefined) {
+    const validLevels = ['beginner', 'intermediate', 'advanced'];
+    if (!validLevels.includes(bookData.difficultyLevel)) {
+      return res.status(400).json({
+        success: false,
+        message: `难度级别必须是以下之一：${validLevels.join(', ')}`,
+      });
+    }
+  }
+  
+  // 验证语言（如果提供）
+  if (bookData.language !== undefined) {
+    const validLanguages = ['zh', 'en', 'bilingual', 'other'];
+    if (!validLanguages.includes(bookData.language)) {
+      return res.status(400).json({
+        success: false,
+        message: `语言必须是以下之一：${validLanguages.join(', ')}`,
+      });
+    }
+  }
+
+  // 验证单词数（如果提供）
+  if (bookData.wordCount !== undefined) {
+    if (typeof bookData.wordCount !== 'number' || bookData.wordCount < 0 || !Number.isInteger(bookData.wordCount)) {
+      return res.status(400).json({
+        success: false,
+        message: '单词数必须是一个非负整数',
+      });
+    }
+  }
+
+  // 验证页数（如果提供）- 支持pageCount和pages
+  if (bookData.pageCount !== undefined || bookData.pages !== undefined) {
+    const pageValue = bookData.pageCount !== undefined ? bookData.pageCount : bookData.pages;
+    
+    if (typeof pageValue !== 'number' || pageValue < 0 || !Number.isInteger(pageValue)) {
+      return res.status(400).json({
+        success: false,
+        message: '页数必须是一个非负整数',
+      });
+    }
+  }
+
+  // 验证ISBN（如果提供）
+  if (bookData.isbn !== undefined && typeof bookData.isbn !== 'string') {
+    return res.status(400).json({
+      success: false,
+      message: 'ISBN必须是字符串',
+    });
+  }
+
+  // 验证出版商（如果提供）
+  if (bookData.publisher !== undefined && typeof bookData.publisher !== 'string') {
+    return res.status(400).json({
+      success: false,
+      message: '出版商必须是字符串',
+    });
+  }
+
+  // 验证出版日期（如果提供）
+  if (bookData.publishDate !== undefined) {
+    const date = new Date(bookData.publishDate);
+    if (isNaN(date.getTime())) {
+      return res.status(400).json({
+        success: false,
+        message: '出版日期格式不正确',
+      });
+    }
+  }
+  
+  // 验证评分（如果提供）
+  if (bookData.rating !== undefined) {
+    if (typeof bookData.rating !== 'number' || bookData.rating < 0 || bookData.rating > 5) {
+      return res.status(400).json({
+        success: false,
+        message: '评分必须是0到5之间的数字',
+      });
+    }
+  }
+  
+  // 验证评分人数（如果提供）
+  if (bookData.ratingCount !== undefined) {
+    if (typeof bookData.ratingCount !== 'number' || bookData.ratingCount < 0 || !Number.isInteger(bookData.ratingCount)) {
+      return res.status(400).json({
+        success: false,
+        message: '评分人数必须是一个非负整数',
+      });
+    }
+  }
+  
+  // 验证目标读者（如果提供）
+  if (bookData.targetReader !== undefined && typeof bookData.targetReader !== 'string') {
+    return res.status(400).json({
+      success: false,
+      message: '目标读者必须是字符串',
+    });
+  }
+  
+  // 验证装帧方式（如果提供）
+  if (bookData.binding !== undefined && typeof bookData.binding !== 'string') {
+    return res.status(400).json({
+      success: false,
+      message: '装帧方式必须是字符串',
+    });
+  }
+
+  next();
+};
+
+/**
+ * 辅助函数：验证URL格式是否正确
+ * @param {string} url - 需要验证的URL
+ * @returns {boolean} - 是否是有效的URL
+ */
+function isValidUrl(url) {
+  try {
+    new URL(url);
+    return true;
+  } catch (error) {
+    return false;
+  }
+} 

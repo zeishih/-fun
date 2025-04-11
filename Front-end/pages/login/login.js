@@ -58,7 +58,9 @@ Page({
     wx.login({
       success: (res) => {
         if (res.code) {
-          // 使用code和用户信息进行登录
+          console.log('获取到的 wx.login code:', res.code); 
+          // // <-- 在这里打印 code
+          /*// 使用code和用户信息进行登录
           userService.login(res.code, userInfo)
             .then((loginRes) => {
               if (loginRes.success) {
@@ -112,7 +114,7 @@ Page({
                 title: '登录失败',
                 icon: 'none'
               });
-            });
+            });*/
         } else {
           this.setData({ isLoading: false });
           wx.showToast({

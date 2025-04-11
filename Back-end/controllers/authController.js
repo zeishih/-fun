@@ -73,6 +73,7 @@ exports.login = async (req, res) => {
         id: user._id,
         nickname: user.nickname,
         avatarUrl: user.avatarUrl,
+        role: user.role,
         statistics: user.statistics,
       },
     });
@@ -117,6 +118,7 @@ exports.updateUserInfo = async (req, res) => {
         id: updatedUser._id,
         nickname: updatedUser.nickname,
         avatarUrl: updatedUser.avatarUrl,
+        role: updatedUser.role,
         statistics: updatedUser.statistics,
       },
     });

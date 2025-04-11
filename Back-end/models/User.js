@@ -16,6 +16,12 @@ const userSchema = new mongoose.Schema(
       required: true,
       unique: true,
     },
+    // 用户角色
+    role: {
+      type: String,
+      enum: ['user', 'admin'],
+      default: 'user',
+    },
     // 用户昵称
     nickname: {
       type: String,
