@@ -80,4 +80,53 @@ WECHAT_SECRET=<你的微信小程序AppSecret>
 1. 实现英语阅读内容管理API
 2. 实现用户阅读进度跟踪
 3. 实现阅读统计和数据分析
-4. 添加单元测试和集成测试 
+4. 添加单元测试和集成测试
+
+## 管理员系统
+
+阅读越有fun项目包含一个管理员后台系统，用于管理用户、书籍等内容。
+
+### 管理员API
+
+管理员API使用了与普通用户API不同的认证系统，采用基于角色的访问控制机制。
+
+#### 管理员认证
+
+- `POST /api/admin/auth/login` - 管理员登录
+- `GET /api/admin/auth/profile` - 获取当前管理员信息
+- `PUT /api/admin/auth/password` - 更新管理员密码
+- `POST /api/admin/auth/logout` - 管理员登出
+
+#### 用户管理
+
+- `GET /api/admin/users` - 获取所有用户
+- `GET /api/admin/users/:id` - 获取单个用户详情
+- `PUT /api/admin/users/:id/status` - 更新用户状态
+- `GET /api/admin/users/stats` - 获取用户统计信息
+
+#### 书籍管理
+
+- `GET /api/admin/books` - 获取所有书籍
+- `GET /api/admin/books/:id` - 获取单个书籍详情
+- `POST /api/admin/books` - 创建新书籍
+- `PUT /api/admin/books/:id` - 更新书籍
+- `DELETE /api/admin/books/:id` - 删除书籍
+- `GET /api/admin/books/stats` - 获取书籍统计信息
+
+### 管理员角色
+
+系统设计了三种管理员角色：
+
+1. `superadmin` - 超级管理员，拥有所有权限
+2. `admin` - 管理员，具有大部分管理权限
+3. `editor` - 编辑，只能管理内容，如书籍等
+
+### 初始化管理员账号
+
+首次部署系统后，需要创建一个初始管理员账号：
+
+```bash
+npm run create-admin
+```
+
+这将创建一个超级管理员账号，默认用户名为`admin`，密码为`password123`。请在创建后立即修改密码。 

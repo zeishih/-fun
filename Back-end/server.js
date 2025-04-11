@@ -45,6 +45,9 @@ app.use('/api/auth', require('./routes/auth'));
 app.use('/api/users', require('./routes/user'));
 app.use('/api/books', require('./routes/books')); // 添加书籍路由
 
+// 添加管理员路由
+app.use('/api/admin', require('./routes/admin'));
+
 // 404处理
 app.use((req, res) => {
   res.status(404).json({
