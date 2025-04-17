@@ -39,7 +39,7 @@ const bookSchema = new mongoose.Schema({
     enum: ['beginner', 'intermediate', 'advanced'],
     default: 'intermediate'
   },
-  language: {
+  bookLanguage: {
     type: String,
     enum: ['zh', 'en', 'bilingual', 'other'],
     default: 'zh'
@@ -96,7 +96,13 @@ const bookSchema = new mongoose.Schema({
 });
 
 // 创建索引以支持标题搜索
-bookSchema.index({ title: 'text', author: 'text' });
+bookSchema.index({ title: 'text', author: 'text' },
+  { 
+    default_language: 'none', // <-- 重要：明确指定语言为 'none'
+    
+  }
+
+);
 
 // 增加虚拟属性id，使其与前端的id匹配
 bookSchema.virtual('id').get(function() {

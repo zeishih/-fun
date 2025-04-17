@@ -4,6 +4,7 @@
  */
 const fs = require('fs');
 const path = require('path');
+const ErrorResponse = require('../utils/errorResponse');
 
 /**
  * 记录错误日志到文件
@@ -45,7 +46,15 @@ const errorHandler = (err, req, res, next) => {
   // 记录错误到日志文件
   logErrorToFile(err, reqInfo);
   
-  let statusCode = res.statusCode === 200 ? 500 : res.statusCode;
+  // 优先使用ErrorResponse中的状态码（如果有）
+  let statusCode;
+  if (err instanceof ErrorResponse) {
+    statusCode = err.statusCode;
+    console.log(`检测到ErrorResponse对象，状态码: ${statusCode}`);
+  } else {
+    statusCode = res.statusCode === 200 ? 500 : res.statusCode;
+  }
+  
   let message = err.message || '服务器内部错误';
 
   // 处理Mongoose重复键错误
@@ -112,6 +121,8 @@ const errorHandler = (err, req, res, next) => {
     statusCode = 503;
     message = '无法连接到外部服务，请稍后再试';
   }
+
+  console.log(`最终响应: 状态码 ${statusCode}, 消息: ${message}`);
 
   // 发送响应
   res.status(statusCode).json({

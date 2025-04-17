@@ -32,6 +32,24 @@ const routes = [
         name: 'Books',
         component: () => import('../views/books/index.vue'),
         meta: { title: '书籍管理', icon: 'Reading' }
+      },
+      {
+        path: 'activities',
+        name: 'Activities',
+        component: () => import('../views/activities/index.vue'),
+        meta: { title: '活动管理', icon: 'Calendar' },
+      },
+      {
+        path: 'activities/detail/:id',
+        name: 'ActivityDetail',
+        component: () => import('../views/activities/detail.vue'),
+        meta: { title: '活动详情', hidden: true }
+      },
+      {
+        path: 'activities/statistics',
+        name: 'ActivityStatistics',
+        component: () => import('../views/activities/statistics.vue'),
+        meta: { title: '活动统计', icon: 'DataAnalysis' }
       }
     ]
   },

@@ -322,21 +322,57 @@ exports.validateUserStatistics = (req, res, next) => {
  * @param {Function} next - Express下一个中间件函数
  */
 exports.validateBook = (req, res, next) => {
+  console.log('=== validateBook 中间件被调用 ===');
+  console.log('请求路径:', req.originalUrl);
+  console.log('请求方法:', req.method);
+  console.log('req.admin:', req.admin ? `管理员存在，ID: ${req.admin._id}, 角色: ${req.admin.role}` : '管理员不存在');
+  console.log('请求体数据:', JSON.stringify(req.body));
+  
   const bookData = req.body;
+  const isUpdate = req.method === 'PUT'; // 判断是否为更新操作
+  
+  if (isUpdate) {
+    console.log('检测到更新操作，将跳过必填字段验证');
+  } else {
+    console.log('检测到创建操作，将验证所有必填字段');
+  }
 
-  // 验证标题
-  if (!bookData.title || typeof bookData.title !== 'string' || bookData.title.trim() === '') {
+  // 只在创建操作时验证必填字段
+  if (!isUpdate) {
+    // 验证标题
+    if (!bookData.title || typeof bookData.title !== 'string' || bookData.title.trim() === '') {
+      console.log('验证失败: 书籍标题不能为空');
+      return res.status(400).json({
+        success: false,
+        message: '书籍标题不能为空',
+      });
+    }
+
+    // 验证作者
+    if (!bookData.author || typeof bookData.author !== 'string' || bookData.author.trim() === '') {
+      console.log('验证失败: 作者不能为空');
+      return res.status(400).json({
+        success: false,
+        message: '作者不能为空',
+      });
+    }
+  }
+
+  // 验证标题（如果提供）
+  if (bookData.title !== undefined && (typeof bookData.title !== 'string' || bookData.title.trim() === '')) {
+    console.log('验证失败: 提供的书籍标题无效');
     return res.status(400).json({
       success: false,
-      message: '书籍标题不能为空',
+      message: '书籍标题必须是非空字符串',
     });
   }
 
-  // 验证作者
-  if (!bookData.author || typeof bookData.author !== 'string' || bookData.author.trim() === '') {
+  // 验证作者（如果提供）
+  if (bookData.author !== undefined && (typeof bookData.author !== 'string' || bookData.author.trim() === '')) {
+    console.log('验证失败: 提供的作者无效');
     return res.status(400).json({
       success: false,
-      message: '作者不能为空',
+      message: '作者必须是非空字符串',
     });
   }
 
@@ -392,7 +428,15 @@ exports.validateBook = (req, res, next) => {
   }
   
   // 验证语言（如果提供）
-  if (bookData.language !== undefined) {
+  if (bookData.bookLanguage !== undefined) {
+    const validLanguages = ['zh', 'en', 'bilingual', 'other'];
+    if (!validLanguages.includes(bookData.bookLanguage)) {
+      return res.status(400).json({
+        success: false,
+        message: `语言必须是以下之一：${validLanguages.join(', ')}`,
+      });
+    }
+  } else if (bookData.language !== undefined) {
     const validLanguages = ['zh', 'en', 'bilingual', 'other'];
     if (!validLanguages.includes(bookData.language)) {
       return res.status(400).json({
@@ -487,6 +531,7 @@ exports.validateBook = (req, res, next) => {
     });
   }
 
+  console.log('书籍数据验证通过');
   next();
 };
 
@@ -502,4 +547,272 @@ function isValidUrl(url) {
   } catch (error) {
     return false;
   }
-} 
+}
+
+/**
+ * 验证活动数据
+ * @param {Object} req - Express请求对象
+ * @param {Object} res - Express响应对象
+ * @param {Function} next - Express下一个中间件函数
+ */
+exports.validateActivity = (req, res, next) => {
+  console.log('=== validateActivity 中间件被调用 ===');
+  console.log('请求路径:', req.originalUrl);
+  console.log('请求方法:', req.method);
+  console.log('请求体数据:', JSON.stringify(req.body));
+  
+  const activityData = req.body;
+  const isUpdate = req.method === 'PUT'; // 判断是否为更新操作
+  
+  // 只在创建操作时验证必填字段
+  if (!isUpdate) {
+    // 验证标题
+    if (!activityData.title || typeof activityData.title !== 'string' || activityData.title.trim() === '') {
+      return res.status(400).json({
+        success: false,
+        message: '活动标题不能为空'
+      });
+    }
+    
+    // 验证关联书籍
+    if (!activityData.book) {
+      return res.status(400).json({
+        success: false,
+        message: '必须关联一本书籍'
+      });
+    }
+    
+    // 验证描述
+    if (!activityData.description || typeof activityData.description !== 'string' || activityData.description.trim() === '') {
+      return res.status(400).json({
+        success: false,
+        message: '活动描述不能为空'
+      });
+    }
+    
+    // 验证日期
+    if (!activityData.startDate) {
+      return res.status(400).json({
+        success: false,
+        message: '开始日期不能为空'
+      });
+    }
+    
+    if (!activityData.endDate) {
+      return res.status(400).json({
+        success: false,
+        message: '结束日期不能为空'
+      });
+    }
+  }
+  
+  // 对于所有操作（创建和更新）的字段验证
+  
+  // 验证标题（如果提供）
+  if (activityData.title !== undefined && (typeof activityData.title !== 'string' || activityData.title.trim() === '')) {
+    return res.status(400).json({
+      success: false,
+      message: '活动标题必须是非空字符串'
+    });
+  }
+  
+  // 验证描述（如果提供）
+  if (activityData.description !== undefined && (typeof activityData.description !== 'string')) {
+    return res.status(400).json({
+      success: false,
+      message: '活动描述必须是字符串'
+    });
+  }
+  
+  // 验证日期格式（如果提供）
+  if (activityData.startDate !== undefined) {
+    const startDate = new Date(activityData.startDate);
+    if (isNaN(startDate.getTime())) {
+      return res.status(400).json({
+        success: false,
+        message: '开始日期格式不正确'
+      });
+    }
+  }
+  
+  if (activityData.endDate !== undefined) {
+    const endDate = new Date(activityData.endDate);
+    if (isNaN(endDate.getTime())) {
+      return res.status(400).json({
+        success: false,
+        message: '结束日期格式不正确'
+      });
+    }
+    
+    // 如果同时提供了开始日期和结束日期，检查结束日期是否晚于开始日期
+    if (activityData.startDate !== undefined) {
+      const startDate = new Date(activityData.startDate);
+      if (endDate < startDate) {
+        return res.status(400).json({
+          success: false,
+          message: '结束日期必须晚于或等于开始日期'
+        });
+      }
+    }
+  }
+  
+  // 验证最大参与人数（如果提供）
+  if (activityData.maxParticipants !== undefined) {
+    if (typeof activityData.maxParticipants !== 'number' || 
+        activityData.maxParticipants < 1 || 
+        !Number.isInteger(activityData.maxParticipants)) {
+      return res.status(400).json({
+        success: false,
+        message: '最大参与人数必须是大于等于1的整数'
+      });
+    }
+  }
+  
+  // 验证活动类型（如果提供）
+  if (activityData.type !== undefined) {
+    if (!['public', 'private'].includes(activityData.type)) {
+      return res.status(400).json({
+        success: false,
+        message: '活动类型必须是 public 或 private'
+      });
+    }
+  }
+  
+  // 验证活动规则（如果提供）
+  if (activityData.rules !== undefined) {
+    if (!Array.isArray(activityData.rules)) {
+      return res.status(400).json({
+        success: false,
+        message: '活动规则必须是一个数组'
+      });
+    }
+    
+    for (const rule of activityData.rules) {
+      if (typeof rule !== 'string') {
+        return res.status(400).json({
+          success: false,
+          message: '活动规则必须是字符串数组'
+        });
+      }
+    }
+  }
+  
+  // 验证打卡要求（如果提供）
+  if (activityData.checkInRequirements !== undefined) {
+    const { frequency, contentTypes } = activityData.checkInRequirements;
+    
+    // 验证打卡频率
+    if (frequency !== undefined && !['daily', 'flexible'].includes(frequency)) {
+      return res.status(400).json({
+        success: false,
+        message: '打卡频率必须是 daily 或 flexible'
+      });
+    }
+    
+    // 验证内容类型
+    if (contentTypes !== undefined) {
+      if (!Array.isArray(contentTypes)) {
+        return res.status(400).json({
+          success: false,
+          message: '内容类型必须是一个数组'
+        });
+      }
+      
+      const validTypes = ['text', 'image', 'audio'];
+      for (const type of contentTypes) {
+        if (!validTypes.includes(type)) {
+          return res.status(400).json({
+            success: false,
+            message: `内容类型必须是以下之一：${validTypes.join(', ')}`
+          });
+        }
+      }
+    }
+  }
+  
+  console.log('活动数据验证通过');
+  next();
+};
+
+/**
+ * 验证打卡记录数据
+ * @param {Object} req - Express请求对象
+ * @param {Object} res - Express响应对象
+ * @param {Function} next - Express下一个中间件函数
+ */
+exports.validateCheckIn = (req, res, next) => {
+  console.log('=== validateCheckIn 中间件被调用 ===');
+  console.log('请求路径:', req.originalUrl);
+  console.log('请求方法:', req.method);
+  console.log('请求体数据:', JSON.stringify(req.body));
+  
+  const checkInData = req.body;
+  
+  // 验证内容
+  if (!checkInData.content || typeof checkInData.content !== 'string' || checkInData.content.trim() === '') {
+    return res.status(400).json({
+      success: false,
+      message: '打卡内容不能为空'
+    });
+  }
+  
+  // 验证阅读时长（如果提供）
+  if (checkInData.readingTime !== undefined) {
+    if (typeof checkInData.readingTime !== 'number' || checkInData.readingTime <= 0) {
+      return res.status(400).json({
+        success: false,
+        message: '阅读时长必须是大于0的数字'
+      });
+    }
+  }
+  
+  // 验证阅读页码或进度（如果提供）
+  if (checkInData.pageProgress !== undefined) {
+    if (typeof checkInData.pageProgress !== 'number' || 
+        checkInData.pageProgress < 0 || 
+        !Number.isInteger(checkInData.pageProgress)) {
+      return res.status(400).json({
+        success: false,
+        message: '阅读页码必须是非负整数'
+      });
+    }
+  }
+  
+  // 验证总结（如果提供）
+  if (checkInData.summary !== undefined && typeof checkInData.summary !== 'string') {
+    return res.status(400).json({
+      success: false,
+      message: '总结必须是字符串'
+    });
+  }
+  
+  // 验证图片URL（如果提供）
+  if (checkInData.imageUrls !== undefined) {
+    if (!Array.isArray(checkInData.imageUrls)) {
+      return res.status(400).json({
+        success: false,
+        message: '图片URL必须是一个数组'
+      });
+    }
+    
+    for (const url of checkInData.imageUrls) {
+      if (typeof url !== 'string' || !isValidUrl(url)) {
+        return res.status(400).json({
+          success: false,
+          message: '图片URL格式不正确'
+        });
+      }
+    }
+  }
+  
+  // 验证心情（如果提供）
+  if (checkInData.mood !== undefined && typeof checkInData.mood !== 'string') {
+    return res.status(400).json({
+      success: false,
+      message: '心情必须是字符串'
+    });
+  }
+  
+  console.log('打卡数据验证通过');
+  next();
+}; 

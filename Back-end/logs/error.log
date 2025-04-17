@@ -9,3 +9,45 @@
     at IncomingMessage.emit (node:events:513:28)
     at endReadableNT (node:internal/streams/readable:1359:12)
     at process.processTicksAndRejections (node:internal/process/task_queues:82:21)
+[2025-04-16T02:43:12.592Z] POST /api/books - IP: ::1 - MongoServerError: language override unsupported: zh
+    at /Users/meimei/Desktop/AI+English/01小游戏系列/阅读越有fun/Back-end/node_modules/mongodb/lib/operations/insert.js:50:33
+    at /Users/meimei/Desktop/AI+English/01小游戏系列/阅读越有fun/Back-end/node_modules/mongodb/lib/operations/command.js:84:64
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+[2025-04-16T02:57:08.716Z] POST /api/books - IP: ::1 - MongoServerError: language override unsupported: zh
+    at /Users/meimei/Desktop/AI+English/01小游戏系列/阅读越有fun/Back-end/node_modules/mongodb/lib/operations/insert.js:50:33
+    at /Users/meimei/Desktop/AI+English/01小游戏系列/阅读越有fun/Back-end/node_modules/mongodb/lib/operations/command.js:84:64
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+[2025-04-16T02:58:49.813Z] POST /api/books - IP: ::1 - MongoServerError: language override unsupported: zh
+    at /Users/meimei/Desktop/AI+English/01小游戏系列/阅读越有fun/Back-end/node_modules/mongodb/lib/operations/insert.js:50:33
+    at /Users/meimei/Desktop/AI+English/01小游戏系列/阅读越有fun/Back-end/node_modules/mongodb/lib/operations/command.js:84:64
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+[2025-04-16T04:36:23.016Z] POST /api/books - IP: ::1 - MongoServerError: language override unsupported: zh
+    at /Users/meimei/Desktop/AI+English/01小游戏系列/阅读越有fun/Back-end/node_modules/mongodb/lib/operations/insert.js:50:33
+    at /Users/meimei/Desktop/AI+English/01小游戏系列/阅读越有fun/Back-end/node_modules/mongodb/lib/operations/command.js:84:64
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+[2025-04-16T04:36:33.346Z] POST /api/books - IP: ::1 - MongoServerError: language override unsupported: zh
+    at /Users/meimei/Desktop/AI+English/01小游戏系列/阅读越有fun/Back-end/node_modules/mongodb/lib/operations/insert.js:50:33
+    at /Users/meimei/Desktop/AI+English/01小游戏系列/阅读越有fun/Back-end/node_modules/mongodb/lib/operations/command.js:84:64
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+[2025-04-16T04:36:36.834Z] POST /api/books - IP: ::1 - MongoServerError: language override unsupported: zh
+    at /Users/meimei/Desktop/AI+English/01小游戏系列/阅读越有fun/Back-end/node_modules/mongodb/lib/operations/insert.js:50:33
+    at /Users/meimei/Desktop/AI+English/01小游戏系列/阅读越有fun/Back-end/node_modules/mongodb/lib/operations/command.js:84:64
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+[2025-04-16T05:25:11.283Z] POST /api/books - IP: ::1 - MongoServerError: language override unsupported: zh
+    at /Users/meimei/Desktop/AI+English/01小游戏系列/阅读越有fun/Back-end/node_modules/mongodb/lib/operations/insert.js:50:33
+    at /Users/meimei/Desktop/AI+English/01小游戏系列/阅读越有fun/Back-end/node_modules/mongodb/lib/operations/command.js:84:64
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+[2025-04-16T05:25:13.039Z] POST /api/books - IP: ::1 - MongoServerError: language override unsupported: zh
+    at /Users/meimei/Desktop/AI+English/01小游戏系列/阅读越有fun/Back-end/node_modules/mongodb/lib/operations/insert.js:50:33
+    at /Users/meimei/Desktop/AI+English/01小游戏系列/阅读越有fun/Back-end/node_modules/mongodb/lib/operations/command.js:84:64
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+[2025-04-16T05:26:32.664Z] POST /api/books - IP: ::1 - MongoServerError: language override unsupported: zh
+    at /Users/meimei/Desktop/AI+English/01小游戏系列/阅读越有fun/Back-end/node_modules/mongodb/lib/operations/insert.js:50:33
+    at /Users/meimei/Desktop/AI+English/01小游戏系列/阅读越有fun/Back-end/node_modules/mongodb/lib/operations/command.js:84:64
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+[2025-04-17T08:54:42.444Z] GET /api/books/6800975758539267316bd36d - IP: ::1 - Error: 未找到ID为6800975758539267316bd36d的书籍
+    at /Users/meimei/Desktop/AI+English/01小游戏系列/阅读越有fun/Back-end/controllers/bookController.js:175:17
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+[2025-04-17T09:06:31.340Z] GET /api/books/6800975758539267316bd36d - IP: ::1 - Error: 未找到ID为6800975758539267316bd36d的书籍
+    at /Users/meimei/Desktop/AI+English/01小游戏系列/阅读越有fun/Back-end/controllers/bookController.js:180:19
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
