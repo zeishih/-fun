@@ -49,7 +49,7 @@ app.use('/api/books', require('./routes/books')); // 添加书籍路由
 app.use('/api/activities', require('./routes/activities')); // 添加活动路由
 
 // 添加管理员路由
-app.use('/api/admin', require('./routes/admin'));
+app.use('/api/admin', require('./routes/admin/index'));
 
 // 404处理
 app.use((req, res) => {

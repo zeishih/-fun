@@ -51,3 +51,12 @@
 [2025-04-17T09:06:31.340Z] GET /api/books/6800975758539267316bd36d - IP: ::1 - Error: 未找到ID为6800975758539267316bd36d的书籍
     at /Users/meimei/Desktop/AI+English/01小游戏系列/阅读越有fun/Back-end/controllers/bookController.js:180:19
     at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+[2025-04-18T05:46:28.799Z] PUT /api/admin/activities/6801d5e1dc54cca2ac4e054d/approve - IP: ::1 - TypeError: Cannot read properties of undefined (reading '_id')
+    at /Users/meimei/Desktop/AI+English/01小游戏系列/阅读越有fun/Back-end/controllers/activityController.js:542:34
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+[2025-04-18T05:46:58.373Z] PUT /api/admin/activities/6801d5e1dc54cca2ac4e054d/approve - IP: ::1 - TypeError: Cannot read properties of undefined (reading '_id')
+    at /Users/meimei/Desktop/AI+English/01小游戏系列/阅读越有fun/Back-end/controllers/activityController.js:542:34
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+[2025-04-18T06:54:26.754Z] POST /api/activities/6801d5e1dc54cca2ac4e054d/checkin - IP: ::1 - Error: 只有进行中的活动才能打卡
+    at /Users/meimei/Desktop/AI+English/01小游戏系列/阅读越有fun/Back-end/controllers/checkInController.js:33:17
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)

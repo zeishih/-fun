@@ -4,6 +4,7 @@
  */
 const jwt = require('jsonwebtoken');
 const User = require('../models/User');
+const ErrorResponse = require('../utils/errorResponse');
 
 /**
  * 保护路由，验证用户是否已认证
@@ -52,6 +53,15 @@ exports.protect = async (req, res, next) => {
       return res.status(401).json({
         success: false,
         message: '未授权，用户不存在',
+      });
+    }
+
+    // 检查用户是否被禁用 (处理status可能未定义的情况)
+    if (user.status === false) {
+      console.log('错误: 用户账号已被禁用');
+      return res.status(403).json({
+        success: false,
+        message: '账号已被禁用，请联系管理员',
       });
     }
 

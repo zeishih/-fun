@@ -1,6 +1,7 @@
 const Activity = require('../models/Activity');
 const Book = require('../models/Book');
 const User = require('../models/User');
+const CheckIn = require('../models/CheckInRecord');
 const ErrorResponse = require('../utils/errorResponse');
 const asyncHandler = require('../middleware/async');
 
@@ -187,8 +188,7 @@ exports.getActivityById = asyncHandler(async (req, res, next) => {
   // 获取最新的5条打卡记录
   let recentCheckIns = [];
   try {
-    const CheckInRecord = require('../models/CheckInRecord');
-    recentCheckIns = await CheckInRecord.find({ 
+    recentCheckIns = await CheckIn.find({ 
       activity: activity._id,
       isDeleted: false
     })
@@ -539,7 +539,7 @@ exports.approveActivity = asyncHandler(async (req, res, next) => {
   // 更新审核状态
   activity.approvalStatus = approvalStatus;
   activity.approvalComment = comment || '';
-  activity.approvedBy = req.user._id;
+  activity.approvedBy = req.admin._id;
   activity.approvalDate = new Date();
 
   await activity.save();
@@ -710,4 +710,35 @@ exports.updateActivityStatuses = asyncHandler(async () => {
   );
   
   console.log('活动状态更新完成');
+});
+
+/**
+ * @desc    获取用户在特定活动中的打卡记录
+ * @route   GET /api/activities/:id/user-checkins
+ * @access  Private
+ */
+exports.getUserCheckIns = asyncHandler(async (req, res) => {
+  const activityId = req.params.id;
+  const userId = req.user._id;
+
+  // 检查活动是否存在
+  const activity = await Activity.findById(activityId);
+  if (!activity) {
+    return res.status(404).json({
+      success: false,
+      error: '找不到该活动'
+    });
+  }
+
+  // 获取用户在该活动中的所有打卡记录
+  const checkIns = await CheckIn.find({
+    activity: activityId,
+    user: userId
+  }).sort({ createdAt: -1 });
+
+  res.status(200).json({
+    success: true,
+    count: checkIns.length,
+    data: checkIns
+  });
 }); 

@@ -22,6 +22,11 @@ const userSchema = new mongoose.Schema(
       enum: ['user', 'admin'],
       default: 'user',
     },
+    // 账号状态
+    status: {
+      type: Boolean,
+      default: true, // 默认启用
+    },
     // 用户昵称
     nickname: {
       type: String,
