@@ -30,6 +30,11 @@
           <el-icon><Reading /></el-icon>
           <span>书籍管理</span>
         </el-menu-item>
+        
+        <el-menu-item index="/activities">
+          <el-icon><Calendar /></el-icon>
+          <span>活动管理</span>
+        </el-menu-item>
       </el-menu>
     </div>
     
@@ -74,9 +79,9 @@
 </template>
 
 <script setup>
-import { ref, computed } from 'vue'
+import { ref, computed, defineAsyncComponent } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
-import { Odometer, User, Reading, Fold, Expand, ArrowDown } from '@element-plus/icons-vue'
+import { Odometer, User, Reading, Fold, Expand, ArrowDown, Calendar } from '@element-plus/icons-vue'
 import { useUserStore } from '../store/user'
 import { ElMessageBox } from 'element-plus'
 

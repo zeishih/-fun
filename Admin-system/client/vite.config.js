@@ -9,9 +9,10 @@ export default defineConfig({
     host: '0.0.0.0',
     proxy: {
       // 配置代理
-      '/api': {
+      '/api/admin': {
         target: 'http://localhost:3000',
-        changeOrigin: true
+        changeOrigin: true,
+        rewrite: (path) => path
       }
     }
   }

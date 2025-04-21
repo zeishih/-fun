@@ -3,7 +3,7 @@
     <el-row :gutter="20">
       <!-- 统计卡片 -->
       <el-col :span="6" v-for="(item, index) in statisticsData" :key="index">
-        <el-card class="stat-card" shadow="hover">
+        <el-card class="stat-card" shadow="hover" :class="{ 'clickable': item.path }" @click="handleCardClick(item)">
           <div class="card-content">
             <div class="card-icon" :style="{ backgroundColor: item.color }">
               <el-icon><component :is="item.icon" /></el-icon>
@@ -78,6 +78,9 @@
 <script setup>
 import { ref, onMounted } from 'vue'
 import { User, Reading, Bell, Timer } from '@element-plus/icons-vue'
+import { useRouter } from 'vue-router'
+
+const router = useRouter()
 
 // 统计数据
 const statisticsData = ref([
@@ -103,7 +106,9 @@ const statisticsData = ref([
     title: '待审核活动', 
     value: 0, 
     icon: 'Timer', 
-    color: '#F56C6C' 
+    color: '#F56C6C',
+    path: '/activities',
+    query: { approvalStatus: 'pending' }
   }
 ])
 
@@ -121,6 +126,16 @@ const getStatusType = (status) => {
   return map[status] || ''
 }
 
+// 处理卡片点击
+const handleCardClick = (item) => {
+  if (item.path) {
+    router.push({
+      path: item.path,
+      query: item.query
+    })
+  }
+}
+
 // 获取仪表盘数据
 const fetchDashboardData = async () => {
   try {
@@ -132,7 +147,14 @@ const fetchDashboardData = async () => {
       { title: '总用户数', value: 1258, icon: 'User', color: '#409EFF' },
       { title: '总书籍数', value: 324, icon: 'Reading', color: '#67C23A' },
       { title: '活动数量', value: 56, icon: 'Bell', color: '#E6A23C' },
-      { title: '待审核活动', value: 8, icon: 'Timer', color: '#F56C6C' }
+      { 
+        title: '待审核活动', 
+        value: 8, 
+        icon: 'Timer', 
+        color: '#F56C6C',
+        path: '/activities',
+        query: { approvalStatus: 'pending' }
+      }
     ]
     
     // 更新最近活动
@@ -214,5 +236,15 @@ onMounted(() => {
   display: flex;
   justify-content: center;
   align-items: center;
+}
+
+.clickable {
+  cursor: pointer;
+  transition: transform 0.2s;
+}
+
+.clickable:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 2px 12px 0 rgba(0,0,0,.1);
 }
 </style> 
